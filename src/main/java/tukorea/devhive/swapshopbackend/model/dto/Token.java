@@ -1,4 +1,4 @@
-package com.example.demo.Model.dto;
+package tukorea.devhive.swapshopbackend.model.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

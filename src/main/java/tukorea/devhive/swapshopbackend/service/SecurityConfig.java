@@ -1,12 +1,9 @@
-package com.example.demo.Config;
+package tukorea.devhive.swapshopbackend.service;
 
-import com.example.demo.Service.CustomOAuth2UserService;
-import com.example.demo.Service.JwtAuthFilter;
-import com.example.demo.Service.OAuth2SuccessHandler;
-import com.example.demo.Service.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
@@ -14,6 +11,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @RequiredArgsConstructor
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomOAuth2UserService oAuth2UserService;
@@ -27,12 +25,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/oauth2/**").permitAll()
+                .antMatchers("/api/v1/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthFilter(tokenService),
                         OAuth2LoginAuthenticationFilter.class)
-                .oauth2Login().loginPage("/oauth2/kakao")
+                .oauth2Login().loginPage("/user/new") //.loginPage()는 인증되지 않은 사용자가 접근했을때 리다이렉트되는 페이지를 설정
                 .successHandler(successHandler)
                 .userInfoEndpoint().userService(oAuth2UserService);
 

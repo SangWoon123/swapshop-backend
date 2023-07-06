@@ -1,13 +1,14 @@
-package com.example.demo.Service;
+package tukorea.devhive.swapshopbackend.service;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import tukorea.devhive.swapshopbackend.model.Enum.AuthenticationType;
+import tukorea.devhive.swapshopbackend.model.dao.Login;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 @ToString
 @Builder(access = AccessLevel.PRIVATE)
@@ -46,16 +47,16 @@ public class OAuth2Attribute {
                 .build();
     }
 
-
-    Map<String, Object> convertToMap() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", attributeKey);
-        map.put("key", attributeKey);
-        map.put("name", name);
-        map.put("email", email);
-        map.put("picture", picture);
-
-        return map;
+    public Login toEntity() {
+        return Login.builder()
+                .email(this.email)
+                .name(this.name)
+                .authType(AuthenticationType.KAKAO)
+                .token(this.attributeKey)
+                .build();
     }
+
+
+
 
 }

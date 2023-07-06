@@ -1,12 +1,13 @@
-package com.example.demo.Service;
+package tukorea.devhive.swapshopbackend.service;
 
-import com.example.demo.Model.dto.UserDto;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
+import tukorea.devhive.swapshopbackend.model.dto.UserDto;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

@@ -1,4 +1,4 @@
-package com.example.demo.Model.dto;
+package tukorea.devhive.swapshopbackend.model.dto;
 
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;

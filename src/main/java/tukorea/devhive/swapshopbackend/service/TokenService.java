@@ -1,11 +1,12 @@
-package com.example.demo.Service;
+package tukorea.devhive.swapshopbackend.service;
 
-import com.example.demo.Model.dto.Token;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Service;
+import tukorea.devhive.swapshopbackend.model.dto.Token;
 
 import javax.annotation.PostConstruct;
 import java.util.Base64;

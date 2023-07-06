@@ -1,17 +1,17 @@
-package com.example.demo.Service;
+package tukorea.devhive.swapshopbackend.service;
 
-import com.example.demo.Model.dto.Token;
-import com.example.demo.Model.dto.UserDto;
-import com.example.demo.Model.dto.UserRequestMapper;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
+import tukorea.devhive.swapshopbackend.model.dto.Token;
+import tukorea.devhive.swapshopbackend.model.dto.UserDto;
+import tukorea.devhive.swapshopbackend.model.dto.UserRequestMapper;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +39,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         Token token = tokenService.generateToken(userDto.getEmail(), "USER");
         log.info("{}", token);
 
-        writeTokenResponse(response, token);
+        targetUrl = UriComponentsBuilder.fromUriString("http://localhost:3000")
+                .queryParam("token", token)
+                .build().toUriString();
+        getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
     private void writeTokenResponse(HttpServletResponse response,Token token)throws IOException{
