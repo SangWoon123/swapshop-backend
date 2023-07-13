@@ -16,3 +16,8 @@ spring:
   profiles:
     include: oauth
 
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

@@ -2,47 +2,54 @@ package tukorea.devhive.swapshopbackend.service;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.filter.GenericFilterBean;
-import tukorea.devhive.swapshopbackend.model.dto.UserDto;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+import org.springframework.web.filter.OncePerRequestFilter;
+import tukorea.devhive.swapshopbackend.repository.LoginRepository;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
 
+@Component
 @RequiredArgsConstructor
-public class JwtAuthFilter extends GenericFilterBean {
-    private final TokenService tokenService;
+@Slf4j
+public class JwtAuthFilter extends OncePerRequestFilter {
 
+    private final TokenService tokenService;
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String token = ((HttpServletRequest)request).getHeader("Auth");
+    public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException{
+        String token = parseBearerToken(request); // Bearer 을 제외한 토큰
 
         if (token != null && tokenService.verifyToken(token)) {
-            String email = tokenService.getUid(token);
-
-            // DB연동을 안했으니 이메일 정보로 유저를 만들어주겠습니다
-            UserDto userDto = UserDto.builder()
-                    .email(email)
-                    .name("이름이에용")
-                    .picture("프로필 이미지에요").build();
-
-            Authentication auth = getAuthentication(userDto);
-            SecurityContextHolder.getContext().setAuthentication(auth);
+            String userId = tokenService.getUid(token);
+            Authentication authentication = getAuthentication(userId);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
         chain.doFilter(request, response);
     }
 
-    public Authentication getAuthentication(UserDto member) {
-        return new UsernamePasswordAuthenticationToken(member, "",
-                Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
+    public Authentication getAuthentication(String userId) {
+        return new UsernamePasswordAuthenticationToken(userId, null,
+                AuthorityUtils.NO_AUTHORITIES);
     }
+    private String parseBearerToken(HttpServletRequest request){
+        String barerToken=request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        if (StringUtils.hasText(barerToken) && barerToken.startsWith("Bearer ")) {
+            return barerToken.substring(7);
+        }
+        return null;
+    }
+
+
 }

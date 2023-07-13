@@ -36,17 +36,14 @@ public class Login {
     @Column(name = "authentication_type", nullable = false)
     private AuthenticationType authType;
 
-    @Column(name = "authentication_token")
-    private String token;
-
     @Builder
-    public Login(String email, String password, String name, String major, String introduction, AuthenticationType authType, String token) {
+    public Login(Long id, String email, String password, String name, String major, String introduction, AuthenticationType authType) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
         this.major = major;
         this.introduction = introduction;
         this.authType = authType;
-        this.token = token;
     }
 }
