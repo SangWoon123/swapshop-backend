@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
+import tukorea.devhive.swapshopbackend.model.Enum.AuthenticationType;
 import tukorea.devhive.swapshopbackend.model.dto.Token;
 
 import javax.annotation.PostConstruct;
@@ -22,12 +23,12 @@ public class TokenService {
     }
 
 
-    public Token generateToken(String uid,String role) {
+    public Token generateToken(String uid, AuthenticationType authenticationType) {
         long tokenPeriod = 1000L * 60L * 10L;
         long refreshPeriod = 1000L * 60L * 60L * 24L * 30L * 3L;
 
         Claims claims = Jwts.claims().setSubject(uid);
-        claims.put("role", role);
+        claims.put("type", authenticationType);
 
         Date now = new Date();
         return new Token(
@@ -68,5 +69,15 @@ public class TokenService {
                 .getBody();
         return claims.getSubject();
     }
+
+    public String getAuthType(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return (String) claims.get("type");
+    }
+
 
 }
