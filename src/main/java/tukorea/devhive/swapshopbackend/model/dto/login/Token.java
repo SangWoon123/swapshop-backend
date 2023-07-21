@@ -1,4 +1,4 @@
-package tukorea.devhive.swapshopbackend.model.dto;
+package tukorea.devhive.swapshopbackend.model.dto.login;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,10 +1,7 @@
-package tukorea.devhive.swapshopbackend.model.dto;
+package tukorea.devhive.swapshopbackend.model.dto.login;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import tukorea.devhive.swapshopbackend.model.dao.Login;
+import lombok.*;
+import tukorea.devhive.swapshopbackend.model.dao.login.Login;
 
 @NoArgsConstructor
 @Getter
@@ -27,8 +24,10 @@ public class UserDTO {
     public static UserDTO mapToDto(Login login){
         return UserDTO.builder()
                 .userId(login.getId())
-                .name(login.getName())
+                .name(login.getNickname())
                 .email(login.getEmail())
                 .build();
     }
+
+
 }

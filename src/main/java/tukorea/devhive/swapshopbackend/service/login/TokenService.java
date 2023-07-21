@@ -1,4 +1,4 @@
-package tukorea.devhive.swapshopbackend.service;
+package tukorea.devhive.swapshopbackend.service.login;
 
 
 import io.jsonwebtoken.Claims;
@@ -6,8 +6,8 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
-import tukorea.devhive.swapshopbackend.model.Enum.AuthenticationType;
-import tukorea.devhive.swapshopbackend.model.dto.Token;
+import tukorea.devhive.swapshopbackend.model.Enum.login.AuthenticationType;
+import tukorea.devhive.swapshopbackend.model.dto.login.Token;
 
 import javax.annotation.PostConstruct;
 import java.util.Base64;

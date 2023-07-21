@@ -1,9 +1,9 @@
-package tukorea.devhive.swapshopbackend.repository;
+package tukorea.devhive.swapshopbackend.repository.login;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import tukorea.devhive.swapshopbackend.model.Enum.AuthenticationType;
-import tukorea.devhive.swapshopbackend.model.dao.Login;
+import tukorea.devhive.swapshopbackend.model.Enum.login.AuthenticationType;
+import tukorea.devhive.swapshopbackend.model.dao.login.Login;
 
 import java.util.Optional;
 

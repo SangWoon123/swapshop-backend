@@ -1,26 +1,17 @@
-package tukorea.devhive.swapshopbackend.service;
+package tukorea.devhive.swapshopbackend.service.login;
 
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import tukorea.devhive.swapshopbackend.model.Enum.AuthenticationType;
-import tukorea.devhive.swapshopbackend.model.dao.Login;
+import tukorea.devhive.swapshopbackend.model.Enum.login.AuthenticationType;
+import tukorea.devhive.swapshopbackend.model.dao.login.Login;
 
-import tukorea.devhive.swapshopbackend.repository.LoginRepository;
-
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
+import tukorea.devhive.swapshopbackend.repository.login.LoginRepository;
 
 @Slf4j
 @Service

@@ -1,11 +1,11 @@
-package tukorea.devhive.swapshopbackend.service;
+package tukorea.devhive.swapshopbackend.service.login;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import tukorea.devhive.swapshopbackend.model.Enum.AuthenticationType;
-import tukorea.devhive.swapshopbackend.model.dao.Login;
+import tukorea.devhive.swapshopbackend.model.Enum.login.AuthenticationType;
+import tukorea.devhive.swapshopbackend.model.dao.login.Login;
 import java.util.Map;
 
 @ToString
@@ -69,7 +69,7 @@ public class OAuth2Attribute {
 
         return Login.builder()
                 .email(this.email)
-                .name(this.name)
+                .nickname(this.name)
                 .authType(authType)
                 .build();
     }

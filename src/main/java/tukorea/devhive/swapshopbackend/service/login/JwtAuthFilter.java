@@ -1,4 +1,4 @@
-package tukorea.devhive.swapshopbackend.service;
+package tukorea.devhive.swapshopbackend.service.login;
 
 
 import lombok.RequiredArgsConstructor;
@@ -11,10 +11,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import tukorea.devhive.swapshopbackend.model.Enum.AuthenticationType;
-import tukorea.devhive.swapshopbackend.model.dao.Login;
-import tukorea.devhive.swapshopbackend.model.dto.LoginDTO;
-import tukorea.devhive.swapshopbackend.repository.LoginRepository;
+import tukorea.devhive.swapshopbackend.model.Enum.login.AuthenticationType;
+import tukorea.devhive.swapshopbackend.model.dao.login.Login;
+import tukorea.devhive.swapshopbackend.model.dto.login.LoginDTO;
+import tukorea.devhive.swapshopbackend.repository.login.LoginRepository;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
