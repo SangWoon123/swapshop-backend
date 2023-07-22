@@ -15,9 +15,14 @@ spring:
 
   profiles:
     include: oauth
+    active: aws
 
 logging:
   level:
     org:
       springframework:
         security: DEBUG
+
+
+
+

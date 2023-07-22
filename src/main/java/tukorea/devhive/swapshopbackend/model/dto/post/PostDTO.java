@@ -30,9 +30,10 @@ public class PostDTO {
     private TradeStatus status;
     private int views;
     private List<PostCategory> categories;
+    private String imageUrl;
 
     @Builder
-    public PostDTO(Long id, Login login, String title, String content, int price, String location, TradePeriod desiredTime, TradeStatus status, int views, List<PostCategory> categories) {
+    public PostDTO(Long id, Login login, String title, String content, int price, String location, TradePeriod desiredTime, TradeStatus status, int views, List<PostCategory> categories, String imageUrl) {
         this.id = id;
         this.login = login;
         this.title = title;
@@ -43,6 +44,7 @@ public class PostDTO {
         this.status = status;
         this.views = views;
         this.categories = categories;
+        this.imageUrl = imageUrl;
     }
 
     public Post toEntity(){

@@ -50,6 +50,9 @@ public class Post extends BaseTimeEntity {
     @Column(name = "views")
     private int views;
 
+    @Column
+    private String imageUrl;
+
     @Builder
     public Post(Long id, Login login, List<PostCategory> categories, String title, String content, int price, String location, TradePeriod desiredTime, TradeStatus status, int views) {
         this.id = id;
@@ -73,6 +76,10 @@ public class Post extends BaseTimeEntity {
         this.status = status;
         this.views = views;
         this.categories=categories;
+    }
+
+    public void changeImg(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     //제목, 내용, 가격, 희망거래장소, 희망거래시간, 거래상태, 조회수, 작성시간, 수정시간

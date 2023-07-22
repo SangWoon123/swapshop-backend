@@ -2,6 +2,8 @@ package tukorea.devhive.swapshopbackend.service.post;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import tukorea.devhive.swapshopbackend.bean.S3Uploader;
 import tukorea.devhive.swapshopbackend.model.Enum.login.AuthenticationType;
 import tukorea.devhive.swapshopbackend.model.dao.post.Post;
 import tukorea.devhive.swapshopbackend.model.dao.login.Login;
@@ -10,7 +12,9 @@ import tukorea.devhive.swapshopbackend.model.dto.post.PostDTO;
 import tukorea.devhive.swapshopbackend.repository.login.LoginRepository;
 import tukorea.devhive.swapshopbackend.repository.post.PostRepository;
 
+import java.io.IOException;
 import java.nio.file.AccessDeniedException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,14 +24,19 @@ public class PostService {
 
     private final LoginRepository loginRepository;
     private final PostRepository postRepository;
+    private final S3Uploader s3Uploader;
 
-    public PostDTO create(LoginDTO loginDTO, PostDTO postDTO){
+    public PostDTO create(LoginDTO loginDTO, PostDTO postDTO, MultipartFile image) throws IOException {
 
         String email=loginDTO.getEmail();
         AuthenticationType authenticationType=loginDTO.getAuthenticationType();
 
+
+
         Login login=loginRepository.findByEmailAndAuthType(email,authenticationType)
                 .orElseThrow(()-> new IllegalArgumentException("유저가 존재하지 않습니다."));
+
+
 
         // !! 추후 게시물 작성이 모두 완성되었을때 따로 분리해서 코드 작성 필요 !!
         Post post=Post.builder()
@@ -41,6 +50,24 @@ public class PostService {
                 .views(postDTO.getViews())
                 .build();
 
+//        if(!image.isEmpty()){
+//            // 파일 리스트를 S3Uploader를 이용하여 업로드
+//            List<String> uploadUrls = new ArrayList<>();
+//
+//            for (MultipartFile file : image) {
+//                String uploadUrl = s3Uploader.upload(file, "images");
+//                uploadUrls.add(uploadUrl);
+//            }
+//
+//            post.changeImg(uploadUrls);
+//        }
+
+
+        if(!image.isEmpty()){
+            String storedFileName = s3Uploader.upload(image,"images");
+            post.changeImg(storedFileName);
+        }
+
         postRepository.save(post);
 
         return PostDTO.builder()
@@ -53,6 +80,7 @@ public class PostService {
                 .desiredTime(post.getDesiredTime())
                 .status(post.getStatus())
                 .views(post.getViews())
+                .imageUrl(post.getImageUrl())
                 .build();
 
     }

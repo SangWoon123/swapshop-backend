@@ -1,14 +1,17 @@
 package tukorea.devhive.swapshopbackend.controller.post;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import tukorea.devhive.swapshopbackend.model.dao.post.Post;
 import tukorea.devhive.swapshopbackend.model.dto.login.LoginDTO;
 import tukorea.devhive.swapshopbackend.model.dto.post.PostDTO;
 import tukorea.devhive.swapshopbackend.service.post.PostService;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -20,10 +23,11 @@ public class PostController {
     private final PostService postService;
 
     // 생성
-    @PostMapping()
-    public ResponseEntity<PostDTO> create(@AuthenticationPrincipal LoginDTO userDTO,@RequestBody PostDTO postDTO){
+    @PostMapping
+    public ResponseEntity<PostDTO> create(@AuthenticationPrincipal LoginDTO userDTO,
+                                           @RequestPart("post") PostDTO postDTO,@RequestPart(value="image") MultipartFile image) throws IOException {
         // 글 작성
-        PostDTO post = postService.create(userDTO, postDTO);
+        PostDTO post = postService.create(userDTO, postDTO,image);
         return ResponseEntity.ok(post);
     }
 
