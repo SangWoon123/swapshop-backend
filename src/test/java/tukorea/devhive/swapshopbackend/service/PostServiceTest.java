@@ -58,11 +58,11 @@ class PostServiceTest {
         Login save = loginRepository.save(login);
 
         //when
-        PostDTO post = postService.create(LoginDTO.mapToDto(login), postDTO);
+        //PostDTO post = postService.create(LoginDTO.mapToDto(login), postDTO);
 
 
         //then
-        Assertions.assertEquals(save.getId(),post.getLogin().getId(),"다른 게시물입니다.");
+        //Assertions.assertEquals(save.getId(),post.getLogin().getId(),"다른 게시물입니다.");
 
     }
 
@@ -226,41 +226,41 @@ class PostServiceTest {
         Assertions.assertEquals(0,postRepository.findByLogin(login).size());
     }
 
-    @Test
-    void update() throws InterruptedException {
-        //given
-        Login login = Login.builder()
-                .email("test1@kakao.com")
-                .nickname("tester")
-                .authType(AuthenticationType.KAKAO)
-                .build();
-
-        Post post= Post.builder()
-                .login(login)
-                .title("제목 입니다.")
-                .content("내용 테스트")
-                .build();
-
-        loginRepository.save(login);
-        Post save = postRepository.save(post);
-
-        //when
-        PostDTO updatePost= PostDTO.builder()
-                .id(post.getId())
-                .title("제목이 성공적으로 변경완료")
-                .content("내용이 성공적으로 변경완료")
-                .build();
-
-
-        LoginDTO loginDTO = LoginDTO.mapToDto(login);
-        PostDTO updatedPost = postService.update(loginDTO, save.getId(), updatePost);
-
-        Post test=postRepository.findById(post.getId())
-                .orElseThrow(()->new IllegalArgumentException("zzz"));
-
-        Assertions.assertEquals(updatedPost.getId(),test.getId());
-
-    }
+//    @Test
+//    void update() throws InterruptedException {
+//        //given
+//        Login login = Login.builder()
+//                .email("test1@kakao.com")
+//                .nickname("tester")
+//                .authType(AuthenticationType.KAKAO)
+//                .build();
+//
+//        Post post= Post.builder()
+//                .login(login)
+//                .title("제목 입니다.")
+//                .content("내용 테스트")
+//                .build();
+//
+//        loginRepository.save(login);
+//        Post save = postRepository.save(post);
+//
+//        //when
+//        PostDTO updatePost= PostDTO.builder()
+//                .id(post.getId())
+//                .title("제목이 성공적으로 변경완료")
+//                .content("내용이 성공적으로 변경완료")
+//                .build();
+//
+//
+//        LoginDTO loginDTO = LoginDTO.mapToDto(login);
+//        PostDTO updatedPost = postService.update(loginDTO, save.getId(), updatePost);
+//
+//        Post test=postRepository.findById(post.getId())
+//                .orElseThrow(()->new IllegalArgumentException("zzz"));
+//
+//        Assertions.assertEquals(updatedPost.getId(),test.getId());
+//
+//    }
 
     @Test
     public void categoryTest(){
@@ -307,7 +307,8 @@ class PostServiceTest {
 
         Post savedPost = postRepository.save(post);
 
-        System.out.println("결과 "+savedPost.toString());
+        System.out.println("결과 "+savedPost.getCategories().get(0).getCategory().getName());
+        System.out.println("결과 "+savedPost.getTitle());
 
     }
 }

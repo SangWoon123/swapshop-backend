@@ -14,6 +14,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class PostCategoryDTO {
+
+
     private Long id;
     private Long postId;
     private Long categoryId;

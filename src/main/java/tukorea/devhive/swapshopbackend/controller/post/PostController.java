@@ -12,7 +12,9 @@ import tukorea.devhive.swapshopbackend.model.dto.post.PostDTO;
 import tukorea.devhive.swapshopbackend.service.post.PostService;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/post")
@@ -25,7 +27,8 @@ public class PostController {
     // 생성
     @PostMapping
     public ResponseEntity<PostDTO> create(@AuthenticationPrincipal LoginDTO userDTO,
-                                           @RequestPart("post") PostDTO postDTO,@RequestPart(value="image") MultipartFile image) throws IOException {
+                                          @RequestPart("post") PostDTO postDTO,
+                                          @RequestPart(value="image",required = false) List<MultipartFile> image) throws IOException {
         // 글 작성
         PostDTO post = postService.create(userDTO, postDTO,image);
         return ResponseEntity.ok(post);
@@ -33,8 +36,8 @@ public class PostController {
 
     // 전체 조회
     @GetMapping()
-    public ResponseEntity<List<PostDTO>> findPosts(){
-        return ResponseEntity.ok(postService.showList());
+    public WrappedResponse<List<PostDTO>> findPosts(){
+        return new WrappedResponse<>(true,postService.showList(),"성공");
     }
 
     // 내가 작성한 모든 작성글 조회
@@ -58,8 +61,11 @@ public class PostController {
 
     // 수정
     @PatchMapping("/{postId}")
-    public ResponseEntity<PostDTO> patchPost(@AuthenticationPrincipal LoginDTO userDTO, @PathVariable("postId") Long postId,PostDTO postDTO){
-        PostDTO update=postService.update(userDTO,postId,postDTO);
+    public ResponseEntity<PostDTO> patchPost(@AuthenticationPrincipal LoginDTO userDTO,
+                                             @PathVariable("postId") Long postId,
+                                             @RequestPart(value = "post") PostDTO postDTO,
+                                             @RequestPart(value="image",required = false) List<MultipartFile> image) throws IOException {
+        PostDTO update=postService.update(userDTO,postId,postDTO,image);
         return ResponseEntity.ok(update);
     }
 

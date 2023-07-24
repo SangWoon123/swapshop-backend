@@ -13,11 +13,12 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Post extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id;
 
@@ -50,11 +51,12 @@ public class Post extends BaseTimeEntity {
     @Column(name = "views")
     private int views;
 
-    @Column
-    private String imageUrl;
+    @OneToMany(orphanRemoval = true,cascade = CascadeType.ALL)
+    @JoinColumn(name = "post_id")
+    private List<Image> images=new ArrayList<>();
 
     @Builder
-    public Post(Long id, Login login, List<PostCategory> categories, String title, String content, int price, String location, TradePeriod desiredTime, TradeStatus status, int views) {
+    public Post(Long id, Login login, List<PostCategory> categories, String title, String content, int price, String location, TradePeriod desiredTime, TradeStatus status, int views, List<Image> images) {
         this.id = id;
         this.login = login;
         this.categories = categories;
@@ -65,9 +67,10 @@ public class Post extends BaseTimeEntity {
         this.desiredTime = desiredTime;
         this.status = status;
         this.views = views;
+        this.images = images;
     }
 
-    public void update(String title, String content, int price, String location, TradePeriod desiredTime, TradeStatus status, int views, List<PostCategory> categories) {
+    public void update(String title, String content, int price, String location, TradePeriod desiredTime, TradeStatus status, int views, List<PostCategory> categories,List<Image> images) {
         this.title = title;
         this.content = content;
         this.price = price;
@@ -76,11 +79,15 @@ public class Post extends BaseTimeEntity {
         this.status = status;
         this.views = views;
         this.categories=categories;
+        changeImage(images);
     }
 
-    public void changeImg(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void changeImage(List<Image> updatedImages) {
+        this.images.clear();
+        this.images.addAll(updatedImages);
     }
+
+
 
     //제목, 내용, 가격, 희망거래장소, 희망거래시간, 거래상태, 조회수, 작성시간, 수정시간
 }

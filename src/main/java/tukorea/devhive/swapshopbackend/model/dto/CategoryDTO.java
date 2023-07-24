@@ -16,5 +16,5 @@ public class CategoryDTO {
     private String name;
     private String professor;
     private String code;
-    private List<PostCategory> postCategories=new ArrayList<>();
+    private String major;
 }

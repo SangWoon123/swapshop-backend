@@ -27,8 +27,9 @@ public class Category {
     private List<PostCategory> postCategories=new ArrayList<>();
 
     @Builder
-    public Category(Long id, String name, String professor, String code, List<PostCategory> postCategories) {
+    public Category(Long id, String major, String name, String professor, String code, List<PostCategory> postCategories) {
         this.id = id;
+        this.major = major;
         this.name = name;
         this.professor = professor;
         this.code = code;

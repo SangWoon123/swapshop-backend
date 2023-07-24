@@ -5,10 +5,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import tukorea.devhive.swapshopbackend.bean.S3Uploader;
 import tukorea.devhive.swapshopbackend.model.Enum.login.AuthenticationType;
+import tukorea.devhive.swapshopbackend.model.category.Category;
+import tukorea.devhive.swapshopbackend.model.category.PostCategory;
+import tukorea.devhive.swapshopbackend.model.dao.post.Image;
 import tukorea.devhive.swapshopbackend.model.dao.post.Post;
 import tukorea.devhive.swapshopbackend.model.dao.login.Login;
+import tukorea.devhive.swapshopbackend.model.dto.CategoryDTO;
 import tukorea.devhive.swapshopbackend.model.dto.login.LoginDTO;
 import tukorea.devhive.swapshopbackend.model.dto.post.PostDTO;
+import tukorea.devhive.swapshopbackend.repository.category.CategoryRepository;
 import tukorea.devhive.swapshopbackend.repository.login.LoginRepository;
 import tukorea.devhive.swapshopbackend.repository.post.PostRepository;
 
@@ -24,18 +29,18 @@ public class PostService {
 
     private final LoginRepository loginRepository;
     private final PostRepository postRepository;
+    private final CategoryRepository categoryRepository;
     private final S3Uploader s3Uploader;
 
-    public PostDTO create(LoginDTO loginDTO, PostDTO postDTO, MultipartFile image) throws IOException {
+    public PostDTO create(LoginDTO loginDTO, PostDTO postDTO, List<MultipartFile> images) throws IOException {
 
         String email=loginDTO.getEmail();
         AuthenticationType authenticationType=loginDTO.getAuthenticationType();
 
-
-
         Login login=loginRepository.findByEmailAndAuthType(email,authenticationType)
                 .orElseThrow(()-> new IllegalArgumentException("유저가 존재하지 않습니다."));
 
+        List<PostCategory> categories=new ArrayList<>();
 
 
         // !! 추후 게시물 작성이 모두 완성되었을때 따로 분리해서 코드 작성 필요 !!
@@ -48,25 +53,22 @@ public class PostService {
                 .desiredTime(postDTO.getDesiredTime())
                 .status(postDTO.getStatus())
                 .views(postDTO.getViews())
+                .categories(categories)
                 .build();
 
-//        if(!image.isEmpty()){
-//            // 파일 리스트를 S3Uploader를 이용하여 업로드
-//            List<String> uploadUrls = new ArrayList<>();
-//
-//            for (MultipartFile file : image) {
-//                String uploadUrl = s3Uploader.upload(file, "images");
-//                uploadUrls.add(uploadUrl);
-//            }
-//
-//            post.changeImg(uploadUrls);
-//        }
 
+        if (!images.isEmpty()) {
+            // 이미지 엔티티 생성 및 추가
+            List<Image> imageEntities = new ArrayList<>();
 
-        if(!image.isEmpty()){
-            String storedFileName = s3Uploader.upload(image,"images");
-            post.changeImg(storedFileName);
+            for (MultipartFile file : images) {
+                String uploadUrl = s3Uploader.upload(file, "images");
+                Image image = Image.builder().filePath(uploadUrl).build();
+                imageEntities.add(image); // 이미지 엔티티를 리스트에 추가
+            }
+            post.setImages(imageEntities); // 이미지 엔티티 리스트를 게시물에 설정
         }
+
 
         postRepository.save(post);
 
@@ -80,7 +82,8 @@ public class PostService {
                 .desiredTime(post.getDesiredTime())
                 .status(post.getStatus())
                 .views(post.getViews())
-                .imageUrl(post.getImageUrl())
+                .images(post.getImages())
+                .categories(post.getCategories())
                 .build();
 
     }
@@ -109,15 +112,10 @@ public class PostService {
     // 모든 게시물 조회
     public List<PostDTO> showList() {
         List<Post> allPosts = postRepository.findAll();
-
         // !! 추후 게시물 작성이 모두 완성되었을때 따로 분리해서 코드 작성 필요 !!
         return allPosts.stream()
                 .map(post ->
-                        PostDTO.builder()
-                                .id(post.getId())
-                                .title(post.getTitle())
-                                .content(post.getContent())
-                                .build()
+                        mapToDto(post)
                 ).collect(Collectors.toList());
     }
 
@@ -126,7 +124,6 @@ public class PostService {
     public PostDTO getPostById(Long postId) {
         Post post=postRepository.findById(postId)
                 .orElseThrow(()-> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
-
         // !! 추후 게시물 작성이 모두 완성되었을때 따로 분리해서 코드 작성 필요 !!
         return mapToDto(post);
     }
@@ -134,20 +131,22 @@ public class PostService {
     public PostDTO delete(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(()->new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
+        // S3에서 이미지 삭제
+        List<String> imageUrls = post.getImages().stream()
+                .map(Image::getFilePath)
+                .collect(Collectors.toList());
+        for (String imageUrl : imageUrls) {
+            s3Uploader.deleteImage(imageUrl);
+        }
 
         // !! 추후 게시물 작성이 모두 완성되었을때 따로 분리해서 코드 작성 필요 !!
-        PostDTO postDTO = PostDTO.builder()
-                .title(post.getTitle())
-                .content(post.getContent())
-                .build();
-
+        PostDTO postDTO = mapToDto(post);
         postRepository.delete(post);
-
         return postDTO;
 
     }
 
-    public PostDTO update(LoginDTO userDTO, Long postId,PostDTO postDTO) {
+    public PostDTO update(LoginDTO userDTO, Long postId,PostDTO postDTO,List<MultipartFile> images) throws IOException {
         // 유저가 작성한 게시물인지 확인하고 맞다면 삭제
         Post post=postRepository.findById(postId)
                 .orElseThrow(()->new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
@@ -159,13 +158,35 @@ public class PostService {
             new AccessDeniedException("해당 게시물을 수정할 권한이 없습니다.");
         }
 
+        // S3에서 이미지 삭제
+        List<String> imageUrls = post.getImages().stream()
+                .map(Image::getFilePath)
+                .collect(Collectors.toList());
+        for (String imageUrl : imageUrls) {
+            s3Uploader.deleteImage(imageUrl);
+        }
+
+
+        // 이미지 업데이트
+        List<Image> updatedImages = new ArrayList<>();
+        if (images != null && !images.isEmpty()) {
+            for (MultipartFile file : images) {
+                String uploadUrl = s3Uploader.upload(file, "images");
+                Image image = Image.builder().filePath(uploadUrl).build();
+                updatedImages.add(image);
+            }
+        }
+
+
         //변경감지를 통한 업데이트 적용
         post.update(postDTO.getTitle(), postDTO.getContent(), postDTO.getPrice(), postDTO.getLocation(), postDTO.getDesiredTime()
-        ,postDTO.getStatus(), postDTO.getViews(),postDTO.getCategories());
+                ,postDTO.getStatus(), postDTO.getViews(),postDTO.getCategories(),updatedImages);
 
+        // 게시물 업데이트
+        Post updatedPost = postRepository.save(post);
 
         // 수정된 게시물 정보를 PostDTO로 변환하여 반환
-        return mapToDto(post);
+        return mapToDto(updatedPost);
     }
 
     public PostDTO mapToDto(Post post){
@@ -179,6 +200,7 @@ public class PostService {
                 .desiredTime(post.getDesiredTime())
                 .views(post.getViews())
                 .status(post.getStatus())
+                .images(post.getImages())
                 .build();
     }
 }

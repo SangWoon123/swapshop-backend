@@ -28,7 +28,7 @@ class UserInfoServiceTest {
         //given
         Login login= Login.builder()
                 .email("test@kakao.com")
-                .name("tester")
+                .nickname("tester")
                 .authType(AuthenticationType.KAKAO)
                 .build();
         loginRepository.save(login);
@@ -36,7 +36,7 @@ class UserInfoServiceTest {
         //when
         LoginDTO loginDTO = LoginDTO.builder()
                 .email("test@kakao.com")
-                .name("Update username")
+                .nickname("Update username")
                 .authenticationType(AuthenticationType.KAKAO)
                 .major("컴퓨터공학과")
                 .introduction("자기소개 입니다.")
