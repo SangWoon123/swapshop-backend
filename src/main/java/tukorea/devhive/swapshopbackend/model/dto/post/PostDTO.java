@@ -6,8 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import tukorea.devhive.swapshopbackend.model.Enum.post.TradeStatus;
-import tukorea.devhive.swapshopbackend.model.category.PostCategory;
-import tukorea.devhive.swapshopbackend.model.dao.BaseTimeEntity;
+import tukorea.devhive.swapshopbackend.model.category.Category;
 import tukorea.devhive.swapshopbackend.model.dao.TradePeriod;
 import tukorea.devhive.swapshopbackend.model.dao.post.Image;
 import tukorea.devhive.swapshopbackend.model.dao.post.Post;
@@ -32,11 +31,14 @@ public class PostDTO {
     private TradePeriod desiredTime;
     private TradeStatus status;
     private int views;
-    private List<PostCategory> categories;
-    private List<Image> images;
+
+
+    private List<ImageDTO> images;
+
+    private CategoryDTO category;
 
     @Builder
-    public PostDTO(Long id, Login login, String title, String content, int price, String location, TradePeriod desiredTime, TradeStatus status, int views, List<CategoryDTO> categoryDTOS, List<PostCategory> categories, List<Image> images) {
+    public PostDTO(Long id, Login login, String title, String content, int price, String location, TradePeriod desiredTime, TradeStatus status, int views, List<ImageDTO> images, CategoryDTO category) {
         this.id = id;
         this.login = login;
         this.title = title;
@@ -46,9 +48,8 @@ public class PostDTO {
         this.desiredTime = desiredTime;
         this.status = status;
         this.views = views;
-        this.categoryDTOS = categoryDTOS;
-        this.categories = categories;
         this.images = images;
+        this.category = category;
     }
 
     public Post toEntity(){

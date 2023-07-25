@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tukorea.devhive.swapshopbackend.model.dao.post.Post;
+import tukorea.devhive.swapshopbackend.model.dto.CategoryDTO;
 import tukorea.devhive.swapshopbackend.model.dto.login.LoginDTO;
 import tukorea.devhive.swapshopbackend.model.dto.post.PostDTO;
 import tukorea.devhive.swapshopbackend.service.post.PostService;

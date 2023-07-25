@@ -8,18 +8,14 @@ import org.springframework.transaction.annotation.Transactional;
 import tukorea.devhive.swapshopbackend.model.Enum.login.AuthenticationType;
 import tukorea.devhive.swapshopbackend.model.Enum.post.TradeStatus;
 import tukorea.devhive.swapshopbackend.model.category.Category;
-import tukorea.devhive.swapshopbackend.model.category.PostCategory;
 import tukorea.devhive.swapshopbackend.model.dao.post.Post;
 import tukorea.devhive.swapshopbackend.model.dao.login.Login;
-import tukorea.devhive.swapshopbackend.model.dto.PostCategoryDTO;
-import tukorea.devhive.swapshopbackend.model.dto.login.LoginDTO;
 import tukorea.devhive.swapshopbackend.model.dto.post.PostDTO;
 import tukorea.devhive.swapshopbackend.repository.category.CategoryRepository;
 import tukorea.devhive.swapshopbackend.repository.login.LoginRepository;
 import tukorea.devhive.swapshopbackend.repository.post.PostRepository;
 import tukorea.devhive.swapshopbackend.service.post.PostService;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -262,53 +258,53 @@ class PostServiceTest {
 //
 //    }
 
-    @Test
-    public void categoryTest(){
-        // 카테고리1 테스트
-        Category category1=Category.builder()
-                .name("종합설계1")
-                .build();
-        categoryRepository.save(category1);
-
-        // 카테고리2 테스트
-        Category category2=Category.builder()
-                .name("종합설계2")
-                .build();
-        categoryRepository.save(category2);
-
-
-        List<PostCategory> categories=new ArrayList<>();
-
-
-        // 게시물 생성
-        Post post = Post.builder()
-                .title("게시물 제목")
-                .content("게시물 내용")
-                .price(10000)
-                .location("서울")
-                .status(TradeStatus.WAITING)
-                .views(0)
-                .categories(categories)
-                .build();
-
-        PostCategory p1 = new PostCategory();
-        p1.setPost(post);
-        p1.setCategory(category1);
-
-        PostCategory p2=new PostCategory();
-        p2.setPost(post);
-        p2.setCategory(category2);
-
-
-
-        post.getCategories().add(p1);
-        post.getCategories().add(p2);
-
-
-        Post savedPost = postRepository.save(post);
-
-        System.out.println("결과 "+savedPost.getCategories().get(0).getCategory().getName());
-        System.out.println("결과 "+savedPost.getTitle());
-
-    }
+//    @Test
+//    public void categoryTest(){
+//        // 카테고리1 테스트
+//        Category category1=Category.builder()
+//                .name("종합설계1")
+//                .build();
+//        categoryRepository.save(category1);
+//
+//        // 카테고리2 테스트
+//        Category category2=Category.builder()
+//                .name("종합설계2")
+//                .build();
+//        categoryRepository.save(category2);
+//
+//
+//        List<PostCategory> categories=new ArrayList<>();
+//
+//
+//        // 게시물 생성
+//        Post post = Post.builder()
+//                .title("게시물 제목")
+//                .content("게시물 내용")
+//                .price(10000)
+//                .location("서울")
+//                .status(TradeStatus.WAITING)
+//                .views(0)
+//                .categories(categories)
+//                .build();
+//
+//        PostCategory p1 = new PostCategory();
+//        p1.setPost(post);
+//        p1.setCategory(category1);
+//
+//        PostCategory p2=new PostCategory();
+//        p2.setPost(post);
+//        p2.setCategory(category2);
+//
+//
+//
+//        post.getCategories().add(p1);
+//        post.getCategories().add(p2);
+//
+//
+//        Post savedPost = postRepository.save(post);
+//
+//        System.out.println("결과 "+savedPost.getCategories().get(0).getCategory().getName());
+//        System.out.println("결과 "+savedPost.getTitle());
+//
+//    }
 }

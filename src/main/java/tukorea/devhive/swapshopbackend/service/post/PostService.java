@@ -6,16 +6,16 @@ import org.springframework.web.multipart.MultipartFile;
 import tukorea.devhive.swapshopbackend.bean.S3Uploader;
 import tukorea.devhive.swapshopbackend.model.Enum.login.AuthenticationType;
 import tukorea.devhive.swapshopbackend.model.category.Category;
-import tukorea.devhive.swapshopbackend.model.category.PostCategory;
 import tukorea.devhive.swapshopbackend.model.dao.post.Image;
 import tukorea.devhive.swapshopbackend.model.dao.post.Post;
 import tukorea.devhive.swapshopbackend.model.dao.login.Login;
 import tukorea.devhive.swapshopbackend.model.dto.CategoryDTO;
 import tukorea.devhive.swapshopbackend.model.dto.login.LoginDTO;
+import tukorea.devhive.swapshopbackend.model.dto.post.ImageDTO;
 import tukorea.devhive.swapshopbackend.model.dto.post.PostDTO;
-import tukorea.devhive.swapshopbackend.repository.category.CategoryRepository;
 import tukorea.devhive.swapshopbackend.repository.login.LoginRepository;
 import tukorea.devhive.swapshopbackend.repository.post.PostRepository;
+import tukorea.devhive.swapshopbackend.service.category.CategoryService;
 
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
@@ -29,10 +29,10 @@ public class PostService {
 
     private final LoginRepository loginRepository;
     private final PostRepository postRepository;
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
     private final S3Uploader s3Uploader;
 
-    public PostDTO create(LoginDTO loginDTO, PostDTO postDTO, List<MultipartFile> images) throws IOException {
+    public PostDTO create(LoginDTO loginDTO, PostDTO postDTO,List<MultipartFile> images) throws IOException {
 
         String email=loginDTO.getEmail();
         AuthenticationType authenticationType=loginDTO.getAuthenticationType();
@@ -40,7 +40,6 @@ public class PostService {
         Login login=loginRepository.findByEmailAndAuthType(email,authenticationType)
                 .orElseThrow(()-> new IllegalArgumentException("유저가 존재하지 않습니다."));
 
-        List<PostCategory> categories=new ArrayList<>();
 
 
         // !! 추후 게시물 작성이 모두 완성되었을때 따로 분리해서 코드 작성 필요 !!
@@ -53,11 +52,13 @@ public class PostService {
                 .desiredTime(postDTO.getDesiredTime())
                 .status(postDTO.getStatus())
                 .views(postDTO.getViews())
-                .categories(categories)
                 .build();
 
+        categoryService.search(postDTO.getCategory(),post);
 
-        if (!images.isEmpty()) {
+
+        //if(!images.isEmpty()) -> null값이면 오류발생
+        if (images!=null) {
             // 이미지 엔티티 생성 및 추가
             List<Image> imageEntities = new ArrayList<>();
 
@@ -82,8 +83,8 @@ public class PostService {
                 .desiredTime(post.getDesiredTime())
                 .status(post.getStatus())
                 .views(post.getViews())
-                .images(post.getImages())
-                .categories(post.getCategories())
+                .images(postDTO.getImages())
+                .category(postDTO.getCategory())
                 .build();
 
     }
@@ -101,11 +102,7 @@ public class PostService {
         // !! 추후 게시물 작성이 모두 완성되었을때 따로 분리해서 코드 작성 필요 !!
         return posts.stream()
                 .map(post ->
-                    PostDTO.builder()
-                            .id(post.getId())
-                            .title(post.getTitle())
-                            .content(post.getContent())
-                            .build()
+                    mapToDto(post)
                 ).collect(Collectors.toList());
     }
 
@@ -166,7 +163,6 @@ public class PostService {
             s3Uploader.deleteImage(imageUrl);
         }
 
-
         // 이미지 업데이트
         List<Image> updatedImages = new ArrayList<>();
         if (images != null && !images.isEmpty()) {
@@ -177,10 +173,13 @@ public class PostService {
             }
         }
 
+        // 카테고리 업데이트
+        Category category = categoryService.mapCategoryToEntity(postDTO.getCategory());
+        post.setCategory(category);
 
         //변경감지를 통한 업데이트 적용
         post.update(postDTO.getTitle(), postDTO.getContent(), postDTO.getPrice(), postDTO.getLocation(), postDTO.getDesiredTime()
-                ,postDTO.getStatus(), postDTO.getViews(),postDTO.getCategories(),updatedImages);
+                ,postDTO.getStatus(), postDTO.getViews(),updatedImages);
 
         // 게시물 업데이트
         Post updatedPost = postRepository.save(post);
@@ -200,7 +199,32 @@ public class PostService {
                 .desiredTime(post.getDesiredTime())
                 .views(post.getViews())
                 .status(post.getStatus())
-                .images(post.getImages())
+                .images(mapImageToDto(post.getImages()))
+                .category(mapCategoryToDto(post.getCategory()))
                 .build();
     }
+
+    private List<ImageDTO> mapImageToDto(List<Image> images) {
+        List<ImageDTO> imageDTOList = new ArrayList<>();
+        for (Image image : images) {
+            ImageDTO imageDTO = ImageDTO.builder()
+                    .filePath(image.getFilePath())
+                    .id(image.getId())
+                    .build();
+            imageDTOList.add(imageDTO);
+        }
+        return imageDTOList;
+    }
+
+    private CategoryDTO mapCategoryToDto(Category category) {
+        return CategoryDTO.builder()
+                .name(category.getName())
+                .professor(category.getProfessor())
+                .major(category.getMajor())
+                .code(category.getCode())
+                .build();
+    }
+
+
+
 }
