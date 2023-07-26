@@ -1,6 +1,7 @@
 package tukorea.devhive.swapshopbackend.service.post;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import tukorea.devhive.swapshopbackend.bean.S3Uploader;
@@ -17,8 +18,15 @@ import tukorea.devhive.swapshopbackend.repository.login.LoginRepository;
 import tukorea.devhive.swapshopbackend.repository.post.PostRepository;
 import tukorea.devhive.swapshopbackend.service.category.CategoryService;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -117,10 +125,13 @@ public class PostService {
     }
 
 
+    private final static String VIEW="alreadyViewCookie";
+    @Transactional
     // 개별 조회
-    public PostDTO getPostById(Long postId) {
+    public PostDTO getPostById(HttpServletRequest request, HttpServletResponse response,Long postId) {
         Post post=postRepository.findById(postId)
                 .orElseThrow(()-> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
+        updateView(request,response,postId); // 조회수 증가 로직 ( 중복조회 x )
         // !! 추후 게시물 작성이 모두 완성되었을때 따로 분리해서 코드 작성 필요 !!
         return mapToDto(post);
     }
@@ -226,5 +237,50 @@ public class PostService {
     }
 
 
+    // 조회수
+    @Transactional
+    int updateView(HttpServletRequest request,HttpServletResponse response,@Param("id") Long id) {
+        Cookie[] cookies = request.getCookies();
+        boolean checkCookie = false;
+        int result = 0;
+        if(cookies != null){
+            for (Cookie cookie : cookies)
+            {
+                // 이미 조회를 한 경우 체크
+                if (cookie.getName().equals(VIEW+id)) checkCookie = true;
 
+            }
+            if(!checkCookie){
+                Cookie newCookie = createCookieForForNotOverlap(id);
+                response.addCookie(newCookie);
+                result = postRepository.updateViews(id);
+            }
+        } else {
+            Cookie newCookie = createCookieForForNotOverlap(id);
+            response.addCookie(newCookie);
+            result = postRepository.updateViews(id);
+        }
+        return result;
+    }
+
+
+    /*
+     * 조회수 중복 방지를 위한 쿠키 생성 메소드
+     * @param cookie
+     * @return
+     * */
+    private Cookie createCookieForForNotOverlap(Long postId) {
+        Cookie cookie = new Cookie(VIEW+postId, String.valueOf(postId));
+        cookie.setComment("조회수 중복 증가 방지 쿠키");	// 쿠키 용도 설명 기재
+        cookie.setMaxAge(getRemainSecondForTommorow()); 	// 하루를 준다.
+        cookie.setHttpOnly(true);				// 서버에서만 조작 가능
+        return cookie;
+    }
+
+    // 다음 날 정각까지 남은 시간(초)
+    private int getRemainSecondForTommorow() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime tommorow = LocalDateTime.now().plusDays(1L).truncatedTo(ChronoUnit.DAYS);
+        return (int) now.until(tommorow, ChronoUnit.SECONDS);
+    }
 }

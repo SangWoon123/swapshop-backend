@@ -12,6 +12,8 @@ import tukorea.devhive.swapshopbackend.model.dto.login.LoginDTO;
 import tukorea.devhive.swapshopbackend.model.dto.post.PostDTO;
 import tukorea.devhive.swapshopbackend.service.post.PostService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -49,8 +51,8 @@ public class PostController {
 
     // 개별 조회
     @GetMapping("/{postId}")
-    public ResponseEntity<PostDTO> findPost(@PathVariable("postId") Long postId){
-        return ResponseEntity.ok(postService.getPostById(postId));
+    public ResponseEntity<PostDTO> findPost(HttpServletRequest request, HttpServletResponse response, @PathVariable("postId") Long postId){
+        return ResponseEntity.ok(postService.getPostById(request,response,postId));
     }
 
     // 삭제된 리소스의 상세 정보를 함께 응답
