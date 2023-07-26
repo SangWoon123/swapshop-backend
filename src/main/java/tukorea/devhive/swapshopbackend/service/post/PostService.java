@@ -81,19 +81,8 @@ public class PostService {
 
         postRepository.save(post);
 
-        return PostDTO.builder()
-                .id(post.getId())
-                .login(post.getLogin())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .price(post.getPrice())
-                .location(post.getLocation())
-                .desiredTime(post.getDesiredTime())
-                .status(post.getStatus())
-                .views(post.getViews())
-                .images(postDTO.getImages())
-                .category(postDTO.getCategory())
-                .build();
+
+        return mapToDto(post);
 
     }
 
