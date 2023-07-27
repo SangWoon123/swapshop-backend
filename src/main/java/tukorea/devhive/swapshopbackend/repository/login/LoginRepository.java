@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository
 public interface LoginRepository extends JpaRepository<Login,Long> {
     Optional<Login> findByEmailAndAuthType(String email, AuthenticationType authType);
+
+    Login findByNickname(String nickname);
 }
