@@ -20,6 +20,19 @@ public class CommentService {
     private final LoginRepository loginRepository;
     private final PostRepository postRepository;
 
+    public CommentDTO findCommentById(Long id) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다. id = " + id));
+
+        CommentDTO commentDTO = new CommentDTO();
+        // Comment 엔티티에서 필요한 정보를 CommentDTO로 복사하는 작업 수행
+        commentDTO.setId(comment.getId());
+        commentDTO.setContent(comment.getContent());
+        // 다른 필요한 정보들도 복사
+
+        return commentDTO;
+    }
+
     // 생성
     @Transactional
     public Long commentSave(String nickname, Long id, CommentDTO dto) {

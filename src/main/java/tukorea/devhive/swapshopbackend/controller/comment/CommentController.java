@@ -22,6 +22,13 @@ public class CommentController {
         return ResponseEntity.ok(commentService.commentSave(userDTO.getNickname(), id, dto));
     }
 
+    // 개별 조회
+    @GetMapping("/post/{id}/comment")
+    public ResponseEntity<CommentDTO> findComment(@PathVariable Long id) {
+        CommentDTO comment = commentService.findCommentById(id);
+        return ResponseEntity.ok(comment);
+    }
+
     // 수정
     @PatchMapping("/post/{postId}/comment/{id}")
     public ResponseEntity<Long> update(@PathVariable Long postId, @PathVariable Long id, @RequestBody CommentDTO dto) {
