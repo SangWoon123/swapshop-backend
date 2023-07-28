@@ -1,9 +1,12 @@
 spring:
   datasource:
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/swapshop
-        username: root
-        password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/swapshop
+    username: root
+    password: 1234
+
+
+
 
   jpa:
     hibernate:
@@ -12,10 +15,17 @@ spring:
       properties:
         hibernate.format_sql: true
         dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+    defer-datasource-initialization: true
 
   profiles:
     include: oauth
     active: aws
+
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:sql/swapshop.sql # 서버 시작시 dml sql문을 실행할 위치 및 파일 지정
+      schema-locations: classpath:sql/swapshop.sql # 서버 시작시 ddl sql문을 실행할 위치 및 파일 지정
 
 logging:
   level:
