@@ -1,5 +1,6 @@
 package tukorea.devhive.swapshopbackend.controller.post;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,10 +31,11 @@ public class PostController {
     // 생성
     @PostMapping
     public ResponseEntity<PostDTO> create(@AuthenticationPrincipal LoginDTO userDTO,
-                                          @RequestPart("post") PostDTO postDTO,
-                                          @RequestPart(value="image",required = false) List<MultipartFile> image) throws IOException {
-        // 글 작성
-        PostDTO post = postService.create(userDTO, postDTO,image);
+                                          @RequestPart("post") String postJson,
+                                          @RequestPart(value="image",required = false) Optional<List<MultipartFile>> image) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        PostDTO postDTO = objectMapper.readValue(postJson, PostDTO.class); // JSON 문자열을 PostDTO 객체로 변환
+        PostDTO post = postService.create(userDTO, postDTO, image.orElse(Collections.emptyList()));
         return ResponseEntity.ok(post);
     }
 
