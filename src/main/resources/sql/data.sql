@@ -15,9 +15,9 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
--- swapshop 데이터베이스 구조 내보내기
-CREATE DATABASE IF NOT EXISTS `swapshop` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `swapshop`;
+-- -- swapshop 데이터베이스 구조 내보내기
+-- CREATE TABLE IF NOT EXISTS `swapshop` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+-- USE `swapshop`;
 INSERT INTO `category` (`name`, `code`, `professor`, `major`) VALUES
 	('영어2', 'AAK12047', '박보경', '기계공학과'),
 	('창의와실천', 'AAK17009', '변진숙', '기계공학과'),

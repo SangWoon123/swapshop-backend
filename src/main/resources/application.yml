@@ -10,7 +10,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       show-sql: true
       properties:
         hibernate.format_sql: true
@@ -24,8 +24,7 @@ spring:
   sql:
     init:
       mode: always
-      data-locations: classpath:sql/swapshop.sql # 서버 시작시 dml sql문을 실행할 위치 및 파일 지정
-      schema-locations: classpath:sql/swapshop.sql # 서버 시작시 ddl sql문을 실행할 위치 및 파일 지정
+      data-locations: classpath:sql/data.sql # 서버 시작시 dml sql문을 실행할 위치 및 파일 지정
 
 logging:
   level:
