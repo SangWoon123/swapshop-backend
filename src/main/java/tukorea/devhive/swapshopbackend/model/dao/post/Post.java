@@ -56,6 +56,9 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @OneToMany
+    private List<Favorite> favorites=new ArrayList<>();
+
     @Builder
     public Post(Long id, Login login, String title, String content, int price, String location, TradePeriod desiredTime, TradeStatus status, int views, List<Image> images, Category category) {
         this.id = id;
