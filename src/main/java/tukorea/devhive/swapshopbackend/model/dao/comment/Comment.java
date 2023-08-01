@@ -3,6 +3,7 @@ package tukorea.devhive.swapshopbackend.model.dao.comment;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import tukorea.devhive.swapshopbackend.model.category.Category;
 import tukorea.devhive.swapshopbackend.model.dao.BaseTimeEntity;
 import tukorea.devhive.swapshopbackend.model.dao.login.Login;
 import tukorea.devhive.swapshopbackend.model.dao.post.Post;
@@ -27,6 +28,10 @@ public class Comment extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private Login login;  // 작성자(user)
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     @Column(name = "comment_content", nullable = false)
     private String content;  // 댓글 내용
 
@@ -43,5 +48,8 @@ public class Comment extends BaseTimeEntity {
     // 댓글 수정
     public void update(String content) {
         this.content = content;
+    }
+
+    public void setCategory(Category category) {
     }
 }

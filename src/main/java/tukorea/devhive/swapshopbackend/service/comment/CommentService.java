@@ -2,10 +2,12 @@ package tukorea.devhive.swapshopbackend.service.comment;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import tukorea.devhive.swapshopbackend.model.category.Category;
 import tukorea.devhive.swapshopbackend.model.dao.comment.Comment;
 import tukorea.devhive.swapshopbackend.model.dao.login.Login;
 import tukorea.devhive.swapshopbackend.model.dao.post.Post;
 import tukorea.devhive.swapshopbackend.model.dto.comment.CommentDTO;
+import tukorea.devhive.swapshopbackend.repository.category.CategoryRepository;
 import tukorea.devhive.swapshopbackend.repository.comment.CommentRepository;
 import tukorea.devhive.swapshopbackend.repository.login.LoginRepository;
 import tukorea.devhive.swapshopbackend.repository.post.PostRepository;
@@ -19,6 +21,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final LoginRepository loginRepository;
     private final PostRepository postRepository;
+    private final CategoryRepository categoryRepository;
 
     public CommentDTO findCommentById(Long id) {
         Comment comment = commentRepository.findById(id)
@@ -33,15 +36,18 @@ public class CommentService {
         return commentDTO;
     }
 
-    // 생성
+     // 생성
     @Transactional
-    public Long commentSave(String nickname, Long id, CommentDTO dto) {
+    public Long commentSave(String nickname, Long postId, CommentDTO dto) {
         Login login = loginRepository.findByNickname(nickname);
-        Post post = postRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("댓글 쓰기 실패 : 해당 게시글이 존재하지 않습니다." + id));
+        Post post = postRepository.findById(postId).orElseThrow(() ->
+                new IllegalArgumentException("댓글 쓰기 실패 : 해당 게시글이 존재하지 않습니다." + postId));
+
+        Category category = post.getCategory();
 
         dto.setLogin(login);
         dto.setPost(post);
+        dto.setCategory(category);
 
         Comment comment = dto.toEntity();
         commentRepository.save(comment);
