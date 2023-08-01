@@ -52,7 +52,7 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "post_id")
     private List<Image> images=new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
