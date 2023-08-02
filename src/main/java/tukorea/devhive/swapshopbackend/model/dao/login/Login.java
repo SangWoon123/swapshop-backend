@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import tukorea.devhive.swapshopbackend.model.Enum.login.AuthenticationType;
+import tukorea.devhive.swapshopbackend.model.dao.post.Favorite;
 import tukorea.devhive.swapshopbackend.model.dao.post.Post;
 
 import javax.persistence.*;
@@ -41,6 +42,9 @@ public class Login {
     @Column(name = "authentication_type", nullable = false)
     private AuthenticationType authType;
 
+    @OneToMany
+    private List<Favorite> favorites=new ArrayList<>();
+
     @Builder
     public Login(Long id, String email, String password, String nickname, String major, String introduction, AuthenticationType authType) {
         this.id = id;
@@ -57,4 +61,6 @@ public class Login {
         this.introduction=introduction;
         this.password=password;
     }
+
+
 }
