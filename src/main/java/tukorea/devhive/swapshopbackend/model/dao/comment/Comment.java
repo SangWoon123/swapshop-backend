@@ -9,6 +9,8 @@ import tukorea.devhive.swapshopbackend.model.dao.login.Login;
 import tukorea.devhive.swapshopbackend.model.dao.post.Post;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -35,14 +37,20 @@ public class Comment extends BaseTimeEntity {
     @Column(name = "comment_content", nullable = false)
     private String content;  // 댓글 내용
 
+    @ManyToOne
+    @JoinColumn(name = "parent_commnet_id")
+    private Comment parentComment;  // 부모 Comment
 
+    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL)
+    private List<Comment> commentList = new ArrayList<>();  // 자식 Comment들
 
     @Builder
-    public Comment(Long id, Post post, Login login, String content, String createdAt, String updatedAt) {
+    public Comment(Long id, Post post, Login login, String content, Comment parentComment) {
         this.id = id;
         this.post = post;
         this.login = login;
         this.content = content;
+        this.parentComment = parentComment;
     }
 
     // 댓글 수정
@@ -51,5 +59,13 @@ public class Comment extends BaseTimeEntity {
     }
 
     public void setCategory(Category category) {
+    }
+
+    public void setParentComment(Comment parentComment) {
+        this.parentComment = parentComment;
+    }
+
+    public void addChildComment(Comment childComment) {
+        this.commentList.add(childComment);
     }
 }

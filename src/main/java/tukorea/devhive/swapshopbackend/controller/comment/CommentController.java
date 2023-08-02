@@ -18,14 +18,6 @@ public class CommentController {
     private final CommentService commentService;
     private final PostRepository postRepository;
 
-//    // 생성
-//    @PostMapping("/{postId}/comment")
-//    public ResponseEntity commentSave(@PathVariable Long postId, @RequestBody CommentDTO dto,
-//                                      @AuthenticationPrincipal LoginDTO userDTO) {
-//        Long categoryId = dto.getCategory().getId();
-//        return ResponseEntity.ok(commentService.commentSave(userDTO.getNickname(), postId, dto));
-//    }
-
     // 생성
     @PostMapping("/{postId}/comment")
     public ResponseEntity commentSave(@PathVariable Long postId, @RequestBody CommentDTO dto,
@@ -35,7 +27,18 @@ public class CommentController {
 
         Long commentId = commentService.commentSave(userDTO.getNickname(), postId, dto);
 
-        // 생성된 댓글의 ID를 응답으로 보내줍니다.
+        return ResponseEntity.ok(commentId);
+    }
+
+    // 대댓글 생성
+    @PostMapping("/{postId}/comment/{parentId}")
+    public ResponseEntity commentSaveWithParent(@PathVariable Long postId, @PathVariable Long parentId,
+                                      @RequestBody CommentDTO dto, @AuthenticationPrincipal LoginDTO userDTO) {
+        Post post = postRepository.findById(postId).orElseThrow(() ->
+                new IllegalArgumentException("댓글 쓰기 실패 : 해당 게시글이 존재하지 않습니다. " + postId));
+
+        Long commentId = commentService.commentSaveWithParent(userDTO.getNickname(), postId, parentId, dto);
+
         return ResponseEntity.ok(commentId);
     }
 

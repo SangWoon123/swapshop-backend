@@ -23,6 +23,7 @@ public class CommentService {
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
 
+    // 댓글 조회
     public CommentDTO findCommentById(Long id) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다. id = " + id));
@@ -36,7 +37,7 @@ public class CommentService {
         return commentDTO;
     }
 
-     // 생성
+    // 생성
     @Transactional
     public Long commentSave(String nickname, Long postId, CommentDTO dto) {
         Login login = loginRepository.findByNickname(nickname);
@@ -50,6 +51,27 @@ public class CommentService {
         dto.setCategory(category);
 
         Comment comment = dto.toEntity();
+        commentRepository.save(comment);
+
+        return dto.getId();
+    }
+
+    // 대댓글 생성
+    public Long commentSaveWithParent(String nickname, Long postId, Long parentId, CommentDTO dto) {
+        Login login = loginRepository.findByNickname(nickname);
+        Post post = postRepository.findById(postId).orElseThrow(() ->
+                new IllegalArgumentException("댓글 쓰기 실패 : 해당 게시글이 존재하지 않습니다. " + postId));
+        Comment parentComment = commentRepository.findById(parentId).orElseThrow(() ->
+                new IllegalArgumentException("대댓글 쓰기 실패 : 부모 댓글이 존재하지 않습니다. " + parentId));
+        Category category = post.getCategory();
+
+        dto.setLogin(login);
+        dto.setPost(post);
+        dto.setCategory(category);
+
+        Comment comment = dto.toEntity();
+        comment.setParentComment(parentComment); // 대댓글의 부모 댓글을 설정
+
         commentRepository.save(comment);
 
         return dto.getId();
@@ -72,4 +94,5 @@ public class CommentService {
 
         commentRepository.delete(comment);
     }
+
 }
