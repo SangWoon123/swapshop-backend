@@ -1,4 +1,4 @@
-package tukorea.devhive.swapshopbackend.model.dao;
+package tukorea.devhive.swapshopbackend.model.dao.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

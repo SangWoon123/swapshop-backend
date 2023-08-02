@@ -1,7 +1,7 @@
-package tukorea.devhive.swapshopbackend.repository;
+package tukorea.devhive.swapshopbackend.repository.message;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import tukorea.devhive.swapshopbackend.model.dao.Message;
+import tukorea.devhive.swapshopbackend.model.dao.message.Message;
 import tukorea.devhive.swapshopbackend.model.dao.login.Login;
 
 import java.util.List;

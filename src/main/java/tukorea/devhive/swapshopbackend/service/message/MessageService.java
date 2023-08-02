@@ -1,20 +1,18 @@
-package tukorea.devhive.swapshopbackend.service;
+package tukorea.devhive.swapshopbackend.service.message;
 
-import com.amazonaws.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tukorea.devhive.swapshopbackend.model.dao.Message;
+import tukorea.devhive.swapshopbackend.model.dao.message.Message;
 import tukorea.devhive.swapshopbackend.model.dao.login.Login;
-import tukorea.devhive.swapshopbackend.model.dto.MessageDTO;
+import tukorea.devhive.swapshopbackend.model.dto.message.MessageDTO;
 import tukorea.devhive.swapshopbackend.model.dto.login.LoginDTO;
-import tukorea.devhive.swapshopbackend.repository.MessageRepository;
+import tukorea.devhive.swapshopbackend.repository.message.MessageRepository;
 import tukorea.devhive.swapshopbackend.repository.login.LoginRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service

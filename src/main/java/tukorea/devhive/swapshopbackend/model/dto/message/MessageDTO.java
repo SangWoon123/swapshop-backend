@@ -1,9 +1,9 @@
-package tukorea.devhive.swapshopbackend.model.dto;
+package tukorea.devhive.swapshopbackend.model.dto.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import tukorea.devhive.swapshopbackend.model.dao.Message;
+import tukorea.devhive.swapshopbackend.model.dao.message.Message;
 
 @Data
 @AllArgsConstructor

@@ -1,18 +1,14 @@
-package tukorea.devhive.swapshopbackend.controller;
+package tukorea.devhive.swapshopbackend.controller.message;
 
-import com.amazonaws.Response;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import tukorea.devhive.swapshopbackend.model.dao.login.Login;
-import tukorea.devhive.swapshopbackend.model.dto.MessageDTO;
+import tukorea.devhive.swapshopbackend.model.dto.message.MessageDTO;
 import tukorea.devhive.swapshopbackend.model.dto.login.LoginDTO;
 import tukorea.devhive.swapshopbackend.repository.login.LoginRepository;
-import tukorea.devhive.swapshopbackend.service.MessageService;
+import tukorea.devhive.swapshopbackend.service.message.MessageService;
 
 import java.util.List;
 
@@ -49,14 +45,5 @@ public class MessageController {
         Login user = loginRepository.findByNickname(userDto.getNickname());
         messageService.deleteMessageByReceiver(id, user);
     }
-
-    // WebSocket 메시지 핸들러
-    @MessageMapping("/sendMessage")
-    @SendTo("/topic/messages")
-    public MessageDTO handleWebSocketMessage(@RequestBody MessageDTO messageDTO) {
-        return ;
-    }
-
-
 
 }
