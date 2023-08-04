@@ -26,7 +26,7 @@ public class UserInfoService {
         Login userInfo = loginRepository.findByEmailAndAuthType(email, authType)
                 .orElseThrow(()->new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
 
-        userInfo.update(loginDTO.getMajor(),loginDTO.getIntroduction(), loginDTO.getPassword());
+        userInfo.update(loginDTO.getNickname(),loginDTO.getMajor(),loginDTO.getIntroduction(), loginDTO.getPassword());
 
         loginRepository.save(userInfo);
 

@@ -56,7 +56,8 @@ public class Login {
         this.authType = authType;
     }
 
-    public void update(String major,String introduction,String password){
+    public void update(String nickname,String major,String introduction,String password){
+        this.nickname=nickname;
         this.major=major;
         this.introduction=introduction;
         this.password=password;
