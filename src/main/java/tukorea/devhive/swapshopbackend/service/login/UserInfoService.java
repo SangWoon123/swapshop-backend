@@ -17,10 +17,16 @@ public class UserInfoService {
         String email= loginDTO.getEmail();
         AuthenticationType authType=loginDTO.getAuthenticationType();
 
+        // 중복 닉네임 확인
+        Login byNickname = loginRepository.findByNickname(loginDTO.getNickname());
+        if(byNickname!=null){
+            throw new IllegalArgumentException("중복된 닉네임 입니다.");
+        }
+
         Login userInfo = loginRepository.findByEmailAndAuthType(email, authType)
                 .orElseThrow(()->new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
 
-        userInfo.update(loginDTO.getMajor(),loginDTO.getIntroduction(), loginDTO.getPassword());
+        userInfo.update(loginDTO.getNickname(),loginDTO.getMajor(),loginDTO.getIntroduction(), loginDTO.getPassword());
 
         loginRepository.save(userInfo);
 
