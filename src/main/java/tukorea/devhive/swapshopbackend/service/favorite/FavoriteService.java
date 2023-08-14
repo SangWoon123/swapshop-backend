@@ -32,22 +32,24 @@ public class FavoriteService {
 
         // 게시물 찜하기 여부 체크
         Favorite existingFavorite=user.getFavorites().stream()
-                .filter(i->i.getPost().getFavorites().equals(i))
+                .filter(favorite->favorite.getPost().getId().equals(postId))
                 .findFirst()
                 .orElse(null);
+
+
 
         // existingFavorite여부로 게시물 찜하기 또는 찜하기 취소
         if(existingFavorite==null){
             Favorite favorite=new Favorite(user,post);
             favoriteRepository.save(favorite);
             return ResponseEntity.ok("찜 목록에 추가되었습니다.");
-        }else{
-            favoriteRepository.delete(existingFavorite);
-            return ResponseEntity.ok("찜 목록에서 제거되었습니다.");
-
         }
 
+        favoriteRepository.delete(existingFavorite);
+        return ResponseEntity.ok("찜 목록에서 제거되었습니다.");
+
     }
+
 
     public List<FavoriteDTO> findAllFavoriteByUser(LoginDTO loginDTO){
         Login user=loginRepository.findById(loginDTO.getUserId())

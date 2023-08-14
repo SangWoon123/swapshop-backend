@@ -56,7 +56,7 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany
+    @OneToMany(mappedBy ="post")
     private List<Favorite> favorites=new ArrayList<>();
 
     @Builder

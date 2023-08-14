@@ -42,7 +42,7 @@ public class Login {
     @Column(name = "authentication_type", nullable = false)
     private AuthenticationType authType;
 
-    @OneToMany
+    @OneToMany(mappedBy = "login")
     private List<Favorite> favorites=new ArrayList<>();
 
     @Builder
