@@ -12,14 +12,13 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
-    private String title;
 
     @Column(nullable = false)
     private String content;
@@ -34,13 +33,26 @@ public class Message {
 
     private LocalDateTime createdAt;
 
-    @Builder
-    public Message(Long id, String title, String content, Login sender, Login receiver, LocalDateTime createdAt) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.sender = sender;
-        this.receiver = receiver;
-        this.createdAt = createdAt;
+    @Column(nullable = false)
+    private boolean deletedBySender;
+
+    @Column(nullable = false)
+    private boolean deleteByReceiver;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "messageRoom_id")
+    private MessageRoom messageRoom;
+
+    public void deleteBySender(){
+        this.deletedBySender=true;
     }
+
+    public void deleteByReceiver(){
+        this.deleteByReceiver=true;
+    }
+
+    public boolean isDeleted(){
+        return isDeletedBySender() && isDeleteByReceiver();
+    }
+
 }
