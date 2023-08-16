@@ -2,13 +2,10 @@ package tukorea.devhive.swapshopbackend.controller.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import tukorea.devhive.swapshopbackend.model.dao.post.Post;
-import tukorea.devhive.swapshopbackend.model.dto.CategoryDTO;
 import tukorea.devhive.swapshopbackend.model.dto.login.LoginDTO;
 import tukorea.devhive.swapshopbackend.model.dto.post.PostDTO;
 import tukorea.devhive.swapshopbackend.service.post.PostService;
@@ -34,6 +31,7 @@ public class PostController {
                                           @RequestPart("post") String postJson,
                                           @RequestPart(value="image",required = false) Optional<List<MultipartFile>> image) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
+//        objectMapper.registerModule(new JavaTimeModule()); // LocalDateTime 직렬화
         PostDTO postDTO = objectMapper.readValue(postJson, PostDTO.class); // JSON 문자열을 PostDTO 객체로 변환
         PostDTO post = postService.create(userDTO, postDTO, image.orElse(Collections.emptyList()));
         return ResponseEntity.ok(post);
