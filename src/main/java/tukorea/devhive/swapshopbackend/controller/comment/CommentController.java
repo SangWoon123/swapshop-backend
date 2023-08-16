@@ -12,6 +12,7 @@ import tukorea.devhive.swapshopbackend.service.comment.CommentService;
 
 @RestController
 @RequestMapping("/post")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 
 public class CommentController {
