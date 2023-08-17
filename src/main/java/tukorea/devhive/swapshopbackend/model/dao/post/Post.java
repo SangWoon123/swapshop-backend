@@ -1,5 +1,6 @@
 package tukorea.devhive.swapshopbackend.model.dao.post;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Post extends BaseTimeEntity {
 
     @Id
@@ -61,7 +63,7 @@ public class Post extends BaseTimeEntity {
     private Category category;
 
     @OneToMany(mappedBy = "post")
-    private List<Favorite> favorites=new ArrayList<>();
+    private List<Favorite> favorites = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
