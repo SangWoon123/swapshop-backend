@@ -8,15 +8,12 @@
 
 <div style="text-align:center;">
 
-<img width="30%" alt="스크린샷 2023-08-17 오후 8 24 49" src="https://github.com/SangWoon123/swapshop-backend/assets/100204926/fce853d6-399c-4df8-b91e-e912d38e5a6e">
+<img width="30%" alt="스크린샷 2023-08-17 오후 8 24 49" src="https://github.com/SangWoon123/swapshop-backend/assets/100204926/fce853d6-399c-4df8-b91e-e912d38e5a6e"/>
 
+</div>
 <div style="text-align:center;">
  한국OO대학교 중고서적 거래 플랫폼 
 </div>
-
-<div>
-
-</div>   
 
  ## 🗓️ 프로젝트 기간
 23/07/04~
