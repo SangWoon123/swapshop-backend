@@ -1,10 +1,14 @@
 package tukorea.devhive.swapshopbackend.model.dao.post;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import tukorea.devhive.swapshopbackend.model.Enum.post.TradeStatus;
 import tukorea.devhive.swapshopbackend.model.category.Category;
 import tukorea.devhive.swapshopbackend.model.dao.BaseTimeEntity;
 import tukorea.devhive.swapshopbackend.model.dao.TradePeriod;
+import tukorea.devhive.swapshopbackend.model.dao.comment.Comment;
 import tukorea.devhive.swapshopbackend.model.dao.login.Login;
 
 import javax.persistence.*;
@@ -56,8 +60,11 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy ="post")
+    @OneToMany(mappedBy = "post")
     private List<Favorite> favorites=new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder
     public Post(Long id, Login login, String title, String content, int price, String location, TradePeriod desiredTime, TradeStatus status, int views, List<Image> images, Category category) {

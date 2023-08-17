@@ -7,16 +7,20 @@ import org.springframework.web.multipart.MultipartFile;
 import tukorea.devhive.swapshopbackend.bean.S3Uploader;
 import tukorea.devhive.swapshopbackend.model.Enum.login.AuthenticationType;
 import tukorea.devhive.swapshopbackend.model.category.Category;
+import tukorea.devhive.swapshopbackend.model.dao.comment.Comment;
 import tukorea.devhive.swapshopbackend.model.dao.post.Image;
 import tukorea.devhive.swapshopbackend.model.dao.post.Post;
 import tukorea.devhive.swapshopbackend.model.dao.login.Login;
 import tukorea.devhive.swapshopbackend.model.dto.CategoryDTO;
+import tukorea.devhive.swapshopbackend.model.dto.comment.CommentDTO;
 import tukorea.devhive.swapshopbackend.model.dto.login.LoginDTO;
 import tukorea.devhive.swapshopbackend.model.dto.post.ImageDTO;
 import tukorea.devhive.swapshopbackend.model.dto.post.PostDTO;
+import tukorea.devhive.swapshopbackend.repository.comment.CommentRepository;
 import tukorea.devhive.swapshopbackend.repository.login.LoginRepository;
 import tukorea.devhive.swapshopbackend.repository.post.PostRepository;
 import tukorea.devhive.swapshopbackend.service.category.CategoryService;
+import tukorea.devhive.swapshopbackend.service.comment.CommentService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -38,6 +42,7 @@ public class PostService {
     private final LoginRepository loginRepository;
     private final PostRepository postRepository;
     private final CategoryService categoryService;
+    private final CommentRepository commentRepository;
     private final S3Uploader s3Uploader;
 
     public PostDTO create(LoginDTO loginDTO, PostDTO postDTO,List<MultipartFile> images) throws IOException {
@@ -201,6 +206,7 @@ public class PostService {
                 .status(post.getStatus())
                 .images(mapImageToDto(post.getImages()))
                 .category(mapCategoryToDto(post.getCategory()))
+                .comment(mapCommentToDto(post.getComments()))
                 .build();
     }
 
@@ -216,6 +222,17 @@ public class PostService {
         return imageDTOList;
     }
 
+    private List<CommentDTO> mapCommentToDto(List<Comment> comments) {
+        List<CommentDTO> commentDTOList = new ArrayList<>();
+        for (Comment comment : comments) {
+            CommentDTO commentDTO = CommentDTO.builder()
+                    .id(comment.getId())
+                    .build();
+            commentDTOList.add(commentDTO);
+        }
+        return commentDTOList;
+    }
+
     private CategoryDTO mapCategoryToDto(Category category) {
         return CategoryDTO.builder()
                 .name(category.getName())
@@ -228,7 +245,7 @@ public class PostService {
 
     // 조회수
     @Transactional
-    int updateView(HttpServletRequest request,HttpServletResponse response,@Param("id") Long id) {
+    public int updateView(HttpServletRequest request,HttpServletResponse response,@Param("id") Long id) {
         Cookie[] cookies = request.getCookies();
         boolean checkCookie = false;
         int result = 0;

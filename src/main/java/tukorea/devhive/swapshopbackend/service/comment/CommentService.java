@@ -2,17 +2,16 @@ package tukorea.devhive.swapshopbackend.service.comment;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import tukorea.devhive.swapshopbackend.model.category.Category;
 import tukorea.devhive.swapshopbackend.model.dao.comment.Comment;
-import tukorea.devhive.swapshopbackend.model.dao.login.Login;
 import tukorea.devhive.swapshopbackend.model.dao.post.Post;
 import tukorea.devhive.swapshopbackend.model.dto.comment.CommentDTO;
-import tukorea.devhive.swapshopbackend.repository.category.CategoryRepository;
 import tukorea.devhive.swapshopbackend.repository.comment.CommentRepository;
 import tukorea.devhive.swapshopbackend.repository.login.LoginRepository;
 import tukorea.devhive.swapshopbackend.repository.post.PostRepository;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,78 +20,55 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final LoginRepository loginRepository;
     private final PostRepository postRepository;
-    private final CategoryRepository categoryRepository;
 
-    // 댓글 조회
-    public CommentDTO findCommentById(Long id) {
-        Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다. id = " + id));
-
-        CommentDTO commentDTO = new CommentDTO();
-        // Comment 엔티티에서 필요한 정보를 CommentDTO로 복사하는 작업 수행
-        commentDTO.setId(comment.getId());
-        commentDTO.setContent(comment.getContent());
-        // 다른 필요한 정보들도 복사
-
-        return commentDTO;
+    // 댓글 목록 조회
+    public List<CommentDTO> comments(Long postId) {
+        return commentRepository.findByPostId(postId)
+                .stream()
+                .map(comment -> CommentDTO.createCommentDto(comment))
+                .collect(Collectors.toList());
     }
 
-    // 생성
+    // 댓글 생성
     @Transactional
-    public Long commentSave(String nickname, Long postId, CommentDTO dto) {
-        Login login = loginRepository.findByNickname(nickname);
+    public CommentDTO create(Long postId, CommentDTO dto) {
         Post post = postRepository.findById(postId).orElseThrow(() ->
-                new IllegalArgumentException("댓글 쓰기 실패 : 해당 게시글이 존재하지 않습니다." + postId));
+                new IllegalArgumentException("댓글 쓰기 실패 : 해당 게시글이 존재하지 않습니다."));
 
-        Category category = post.getCategory();
-
-        dto.setLogin(login);
-        dto.setPost(post);
-        dto.setCategory(category);
-
-        Comment comment = dto.toEntity();
-        commentRepository.save(comment);
-
-        return dto.getId();
+        Comment comment = Comment.createComment(dto, post);
+        Comment created = commentRepository.save(comment);
+        return CommentDTO.createCommentDto(created);
     }
 
     // 대댓글 생성
-    public Long commentSaveWithParent(String nickname, Long postId, Long parentId, CommentDTO dto) {
-        Login login = loginRepository.findByNickname(nickname);
-        Post post = postRepository.findById(postId).orElseThrow(() ->
-                new IllegalArgumentException("댓글 쓰기 실패 : 해당 게시글이 존재하지 않습니다. " + postId));
-        Comment parentComment = commentRepository.findById(parentId).orElseThrow(() ->
-                new IllegalArgumentException("대댓글 쓰기 실패 : 부모 댓글이 존재하지 않습니다. " + parentId));
-        Category category = post.getCategory();
-
-        dto.setLogin(login);
-        dto.setPost(post);
-        dto.setCategory(category);
-
-        Comment comment = dto.toEntity();
-        comment.setParentComment(parentComment); // 대댓글의 부모 댓글을 설정
-
-        commentRepository.save(comment);
-
-        return dto.getId();
-    }
-
-    // 수정
     @Transactional
-    public void update(Long postId, Long id, CommentDTO dto) {
-        Comment comment = (Comment) commentRepository.findByPostIdAndId(postId, id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다. " + id));
+    public CommentDTO createReply(Long parentCommentId, CommentDTO dto) {
+        Comment parentComment = commentRepository.findById(parentCommentId).orElseThrow(() ->
+                new IllegalArgumentException("대댓글 쓰기 실패 : 해당 댓글이 존재하지 않습니다."));
 
-        comment.update(dto.getContent());
+        Comment reply = Comment.createReply(dto, parentComment);
+        reply = commentRepository.save(reply);
+        return CommentDTO.createCommentDto(reply);
     }
 
-    // 삭제
+    // 댓글 수정
     @Transactional
-    public void delete(Long postId, Long id) {
-        Comment comment = (Comment) commentRepository.findByPostIdAndId(postId, id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다. id = " + id));
+    public CommentDTO update(Long id, CommentDTO dto) {
+        Comment target = commentRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("댓글 수정 실패 : 해당 댓글이 존재하지 않습니다."));
 
-        commentRepository.delete(comment);
+        target.patch(dto);
+        Comment updated = commentRepository.save(target);
+        return CommentDTO.createCommentDto(updated);
     }
 
+    // 댓글 삭제
+    @Transactional
+    public CommentDTO delete(Long id) {
+        Comment target = commentRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("댓글 삭제 실패 : 해당 댓글이 존재하지 않습니다."));
+
+        commentRepository.delete(target);
+        return CommentDTO.createCommentDto(target);
+    }
 }

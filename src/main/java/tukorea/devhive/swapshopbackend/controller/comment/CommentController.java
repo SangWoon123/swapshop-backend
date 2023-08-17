@@ -1,17 +1,17 @@
 package tukorea.devhive.swapshopbackend.controller.comment;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import tukorea.devhive.swapshopbackend.model.dao.post.Post;
 import tukorea.devhive.swapshopbackend.model.dto.comment.CommentDTO;
-import tukorea.devhive.swapshopbackend.model.dto.login.LoginDTO;
 import tukorea.devhive.swapshopbackend.repository.post.PostRepository;
 import tukorea.devhive.swapshopbackend.service.comment.CommentService;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/post")
+@RequestMapping(value = "/post", method= {RequestMethod.GET, RequestMethod.POST})
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 
@@ -19,48 +19,49 @@ public class CommentController {
     private final CommentService commentService;
     private final PostRepository postRepository;
 
+    // 댓글 목록 조회
+    @GetMapping("/{postId}/comment")
+    public ResponseEntity<List<CommentDTO>> comments(@PathVariable Long postId) {
+
+        List<CommentDTO> dtos = commentService.comments(postId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(dtos);
+    }
+
     // 생성
-    @PostMapping("/{postId}/comment")
-    public ResponseEntity commentSave(@PathVariable Long postId, @RequestBody CommentDTO dto,
-                                      @AuthenticationPrincipal LoginDTO userDTO) {
-        Post post = postRepository.findById(postId).orElseThrow(() ->
-                new IllegalArgumentException("댓글 쓰기 실패 : 해당 게시글이 존재하지 않습니다." + postId));
+    @PostMapping("/{postId}/comment/{commentId}")
+    public ResponseEntity<CommentDTO> create(@PathVariable Long postId, @RequestBody CommentDTO dto) {
 
-        Long commentId = commentService.commentSave(userDTO.getNickname(), postId, dto);
+        CommentDTO createDto = commentService.create(postId, dto);
 
-        return ResponseEntity.ok(commentId);
+        return ResponseEntity.status(HttpStatus.OK).body(createDto);
     }
 
     // 대댓글 생성
     @PostMapping("/{postId}/comment/{parentId}")
-    public ResponseEntity commentSaveWithParent(@PathVariable Long postId, @PathVariable Long parentId,
-                                      @RequestBody CommentDTO dto, @AuthenticationPrincipal LoginDTO userDTO) {
-        Post post = postRepository.findById(postId).orElseThrow(() ->
-                new IllegalArgumentException("댓글 쓰기 실패 : 해당 게시글이 존재하지 않습니다. " + postId));
+    public ResponseEntity<CommentDTO> createReply(@PathVariable Long postId, @PathVariable Long parentId, @RequestBody CommentDTO dto) {
 
-        Long commentId = commentService.commentSaveWithParent(userDTO.getNickname(), postId, parentId, dto);
+        CommentDTO createDto = commentService.createReply(postId, dto);
 
-        return ResponseEntity.ok(commentId);
+        return ResponseEntity.status(HttpStatus.OK).body(createDto);
     }
 
-    // 개별 조회
-    @GetMapping("/{postId}/comment/{id}")
-    public ResponseEntity<CommentDTO> findComment(@PathVariable Long postId, @PathVariable Long id) {
-        CommentDTO comment = commentService.findCommentById(id);
-        return ResponseEntity.ok(comment);
-    }
 
     // 수정
-    @PatchMapping("/{postId}/comment/{id}")
-    public ResponseEntity<Long> update(@PathVariable Long postId, @PathVariable Long id, @RequestBody CommentDTO dto) {
-        commentService.update(postId, id, dto);
-        return ResponseEntity.ok(id);
+    @PatchMapping("/{postId}/comment/{commentId}")
+    public ResponseEntity<CommentDTO> update(@PathVariable Long id, @RequestBody CommentDTO dto) {
+
+        CommentDTO updateDto = commentService.update(id, dto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(updateDto);
     }
 
     // 삭제
-    @DeleteMapping("/{postId}/comment/{id}")
-    public ResponseEntity<Long> delete(@PathVariable Long postId, @PathVariable Long id) {
-        commentService.delete(postId, id);
-        return ResponseEntity.ok(id);
+    @DeleteMapping("/{postId}/comment/{commentId}")
+    public ResponseEntity<CommentDTO> delete(@PathVariable Long id, @RequestBody CommentDTO dto) {
+
+        CommentDTO deleteDto = commentService.update(id, dto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(deleteDto);
     }
 }

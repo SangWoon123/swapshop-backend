@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.minidev.json.annotate.JsonIgnore;
-import tukorea.devhive.swapshopbackend.model.category.Category;
 import tukorea.devhive.swapshopbackend.model.dao.comment.Comment;
 import tukorea.devhive.swapshopbackend.model.dao.login.Login;
 import tukorea.devhive.swapshopbackend.model.dao.post.Post;
@@ -19,7 +18,6 @@ public class CommentDTO {
     @JsonIgnore
     private Post post;
     private Login login;
-    private Category category;
 
     private String nickname;
     private String content;
@@ -27,27 +25,25 @@ public class CommentDTO {
     private Long parentCommentId;
 
     @Builder
-    public CommentDTO(Long id, Post post, Login login, Category category, String nickname,
-                      String content, Comment parentComment, Long parentCommentId) {
+    public CommentDTO(Long id, Post post, String content) {
         this.id = id;
         this.post = post;
-        this.login = login;
-        this.category = category;
-        this.nickname = getLogin().getNickname();
         this.content = content;
-        this.parentComment = parentComment;
-        this.parentCommentId = parentCommentId;
     }
 
-    // DTO -> Entity
+    @Builder
+    public static CommentDTO createCommentDto(Comment comment) {
+        return new CommentDTO(
+                comment.getId(),
+                comment.getPost(),
+                comment.getContent()
+        );
+    }
+
     public Comment toEntity(){
         return Comment.builder()
                 .id(id)
-                .post(post)
-                .login(login)
-                .parentComment(parentComment)
                 .content(content)
                 .build();
     }
-
 }
