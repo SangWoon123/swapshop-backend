@@ -45,18 +45,17 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final S3Uploader s3Uploader;
 
-    public PostDTO create(LoginDTO loginDTO, PostDTO postDTO,List<MultipartFile> images) throws IOException {
+    public PostDTO create(LoginDTO loginDTO, PostDTO postDTO, List<MultipartFile> images) throws IOException {
 
-        String email=loginDTO.getEmail();
-        AuthenticationType authenticationType=loginDTO.getAuthenticationType();
+        String email = loginDTO.getEmail();
+        AuthenticationType authenticationType = loginDTO.getAuthenticationType();
 
-        Login login=loginRepository.findByEmailAndAuthType(email,authenticationType)
-                .orElseThrow(()-> new IllegalArgumentException("유저가 존재하지 않습니다."));
-
+        Login login = loginRepository.findByEmailAndAuthType(email, authenticationType)
+                .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
 
 
         // !! 추후 게시물 작성이 모두 완성되었을때 따로 분리해서 코드 작성 필요 !!
-        Post post=Post.builder()
+        Post post = Post.builder()
                 .login(login)
                 .title(postDTO.getTitle())
                 .content(postDTO.getContent())
@@ -67,11 +66,11 @@ public class PostService {
                 .views(postDTO.getViews())
                 .build();
 
-        categoryService.search(postDTO.getCategory(),post);
+        categoryService.search(postDTO.getCategory(), post);
 
 
         //if(!images.isEmpty()) -> null값이면 오류발생
-        if (images!=null) {
+        if (images != null) {
             // 이미지 엔티티 생성 및 추가
             List<Image> imageEntities = new ArrayList<>();
 
@@ -92,19 +91,19 @@ public class PostService {
     }
 
     // 개별 회원 작성글 조회
-    public List<PostDTO> showListByLogin(LoginDTO loginDTO){
-        String email=loginDTO.getEmail();
-        AuthenticationType authenticationType=loginDTO.getAuthenticationType();
+    public List<PostDTO> showListByLogin(LoginDTO loginDTO) {
+        String email = loginDTO.getEmail();
+        AuthenticationType authenticationType = loginDTO.getAuthenticationType();
 
-        Login login=loginRepository.findByEmailAndAuthType(email,authenticationType)
-                .orElseThrow(()-> new IllegalArgumentException("유저가 존재하지 않습니다."));
+        Login login = loginRepository.findByEmailAndAuthType(email, authenticationType)
+                .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
 
         List<Post> posts = postRepository.findByLogin(login);
 
         // !! 추후 게시물 작성이 모두 완성되었을때 따로 분리해서 코드 작성 필요 !!
         return posts.stream()
                 .map(post ->
-                    mapToDto(post)
+                        mapToDto(post)
                 ).collect(Collectors.toList());
     }
 
@@ -119,20 +118,21 @@ public class PostService {
     }
 
 
-    private final static String VIEW="alreadyViewCookie";
+    private final static String VIEW = "alreadyViewCookie";
+
     @Transactional
     // 개별 조회
-    public PostDTO getPostById(HttpServletRequest request, HttpServletResponse response,Long postId) {
-        Post post=postRepository.findById(postId)
-                .orElseThrow(()-> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
-        updateView(request,response,postId); // 조회수 증가 로직 ( 중복조회 x )
+    public PostDTO getPostById(HttpServletRequest request, HttpServletResponse response, Long postId) {
+        Post post = postRepository.findWithCommentsById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
+        updateView(request, response, postId); // 조회수 증가 로직 ( 중복조회 x )
         // !! 추후 게시물 작성이 모두 완성되었을때 따로 분리해서 코드 작성 필요 !!
         return mapToDto(post);
     }
 
     public PostDTO delete(Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(()->new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
         // S3에서 이미지 삭제
         List<String> imageUrls = post.getImages().stream()
                 .map(Image::getFilePath)
@@ -148,15 +148,15 @@ public class PostService {
 
     }
 
-    public PostDTO update(LoginDTO userDTO, Long postId,PostDTO postDTO,List<MultipartFile> images) throws IOException {
+    public PostDTO update(LoginDTO userDTO, Long postId, PostDTO postDTO, List<MultipartFile> images) throws IOException {
         // 유저가 작성한 게시물인지 확인하고 맞다면 삭제
-        Post post=postRepository.findById(postId)
-                .orElseThrow(()->new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
 
         Long postById = post.getLogin().getId();
         Long userId = userDTO.getUserId();
 
-        if(!userId.equals(postById)){
+        if (!userId.equals(postById)) {
             new AccessDeniedException("해당 게시물을 수정할 권한이 없습니다.");
         }
 
@@ -184,7 +184,7 @@ public class PostService {
 
         //변경감지를 통한 업데이트 적용
         post.update(postDTO.getTitle(), postDTO.getContent(), postDTO.getPrice(), postDTO.getLocation(), postDTO.getDesiredTime()
-                ,postDTO.getStatus(), postDTO.getViews(),updatedImages);
+                , postDTO.getStatus(), postDTO.getViews(), updatedImages);
 
         // 게시물 업데이트
         Post updatedPost = postRepository.save(post);
@@ -193,7 +193,7 @@ public class PostService {
         return mapToDto(updatedPost);
     }
 
-    public PostDTO mapToDto(Post post){
+    public PostDTO mapToDto(Post post) {
         return PostDTO.builder()
                 .id(post.getId())
                 .userId(post.getLogin().getId())
@@ -227,7 +227,17 @@ public class PostService {
         for (Comment comment : comments) {
             CommentDTO commentDTO = CommentDTO.builder()
                     .id(comment.getId())
+                    .postId(comment.getPost().getId())
+                    .nickname(comment.getNickname())
+                    .content(comment.getContent())
+                    .createdAt(comment.getCreatedDate())
+                    .updatedAt(comment.getUpdatedDate())
                     .build();
+
+            if (comment.getParentComment() != null) {
+                commentDTO.setParentCommentId(comment.getParentComment().getId());
+            }
+
             commentDTOList.add(commentDTO);
         }
         return commentDTOList;
@@ -245,18 +255,18 @@ public class PostService {
 
     // 조회수
     @Transactional
-    public int updateView(HttpServletRequest request,HttpServletResponse response,@Param("id") Long id) {
+
+    public int updateView(HttpServletRequest request, HttpServletResponse response, @Param("id") Long id) {
         Cookie[] cookies = request.getCookies();
         boolean checkCookie = false;
         int result = 0;
-        if(cookies != null){
-            for (Cookie cookie : cookies)
-            {
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
                 // 이미 조회를 한 경우 체크
-                if (cookie.getName().equals(VIEW+id)) checkCookie = true;
+                if (cookie.getName().equals(VIEW + id)) checkCookie = true;
 
             }
-            if(!checkCookie){
+            if (!checkCookie) {
                 Cookie newCookie = createCookieForForNotOverlap(id);
                 response.addCookie(newCookie);
                 result = postRepository.updateViews(id);
@@ -276,10 +286,10 @@ public class PostService {
      * @return
      * */
     private Cookie createCookieForForNotOverlap(Long postId) {
-        Cookie cookie = new Cookie(VIEW+postId, String.valueOf(postId));
-        cookie.setComment("조회수 중복 증가 방지 쿠키");	// 쿠키 용도 설명 기재
-        cookie.setMaxAge(getRemainSecondForTommorow()); 	// 하루를 준다.
-        cookie.setHttpOnly(true);				// 서버에서만 조작 가능
+        Cookie cookie = new Cookie(VIEW + postId, String.valueOf(postId));
+        cookie.setComment("조회수 중복 증가 방지 쿠키");    // 쿠키 용도 설명 기재
+        cookie.setMaxAge(getRemainSecondForTommorow());    // 하루를 준다.
+        cookie.setHttpOnly(true);                // 서버에서만 조작 가능
         return cookie;
     }
 
