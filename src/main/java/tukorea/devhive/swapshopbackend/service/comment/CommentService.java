@@ -63,9 +63,11 @@ public class CommentService {
         Comment reply = Comment.createReply(dto, post, parentComment);
         reply = commentRepository.save(reply);
 
-        dto.setId(reply.getId());                 // comment id
-        dto.setPostId(post.getId());              // postID
-        dto.setParentCommentId(parentCommentId);  // 대댓글 id
+        dto.setId(reply.getId());                   // comment id
+        dto.setPostId(post.getId());                // postID
+        dto.setParentCommentId(parentCommentId);    // 대댓글 id
+        dto.setCreatedAt(reply.getCreatedDate());   // 생성시간
+        dto.setUpdatedAt(reply.getUpdatedDate());   // 수정시간
 
         return dto;
     }
@@ -78,6 +80,7 @@ public class CommentService {
                 new IllegalArgumentException("댓글 수정 실패 : 해당 댓글이 존재하지 않습니다."));
 
         target.patch(dto);
+
         Comment updated = commentRepository.save(target);
         return CommentDTO.createCommentDto(updated);
     }

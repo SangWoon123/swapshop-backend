@@ -42,7 +42,6 @@ public class Comment extends BaseTimeEntity {
 
 
     public static Comment createComment(CommentDTO dto, Post post) {
-
         if (dto.getId() != null)
             throw new IllegalArgumentException("댓글 생성 실패 : 댓글의 id가 없어야 합니다.");
 
@@ -69,10 +68,9 @@ public class Comment extends BaseTimeEntity {
     }
 
     public void patch(CommentDTO dto) {
-        if (this.id != dto.getId())
+        if (dto.getId() != null)
             throw new IllegalArgumentException("댓글 수정 실패 : 잘못된 id가 입력되었습니다.");
 
-        if(dto.getContent() != null)
-            this.content = dto.getContent();
+        this.content = dto.getContent();
     }
 }

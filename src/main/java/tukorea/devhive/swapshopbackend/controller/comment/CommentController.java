@@ -49,7 +49,7 @@ public class CommentController {
 
 
     // 수정
-    @PatchMapping("/{postId}/comment/{commentId}")
+    @PatchMapping("/{postId}/comment/{id}")
     public ResponseEntity<CommentDTO> update(@PathVariable Long id, @RequestBody CommentDTO dto) {
 
         CommentDTO updateDto = commentService.update(id, dto);
@@ -58,7 +58,7 @@ public class CommentController {
     }
 
     // 삭제
-    @DeleteMapping("/{postId}/comment/{commentId}")
+    @DeleteMapping("/{postId}/comment/{id}")
     public ResponseEntity<CommentDTO> delete(@PathVariable Long id, @RequestBody CommentDTO dto) {
 
         CommentDTO deleteDto = commentService.delete(id);
