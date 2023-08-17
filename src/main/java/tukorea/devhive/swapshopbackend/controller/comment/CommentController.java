@@ -5,19 +5,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tukorea.devhive.swapshopbackend.model.dto.comment.CommentDTO;
-import tukorea.devhive.swapshopbackend.repository.post.PostRepository;
 import tukorea.devhive.swapshopbackend.service.comment.CommentService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/post", method= {RequestMethod.GET, RequestMethod.POST})
+@RequestMapping("/post")
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 
 public class CommentController {
     private final CommentService commentService;
-    private final PostRepository postRepository;
 
     // 댓글 목록 조회
     @GetMapping("/{postId}/comment")
@@ -29,7 +27,7 @@ public class CommentController {
     }
 
     // 생성
-    @PostMapping("/{postId}/comment/{commentId}")
+    @PostMapping("/{postId}/comment")
     public ResponseEntity<CommentDTO> create(@PathVariable Long postId, @RequestBody CommentDTO dto) {
 
         CommentDTO createDto = commentService.create(postId, dto);
@@ -39,9 +37,12 @@ public class CommentController {
 
     // 대댓글 생성
     @PostMapping("/{postId}/comment/{parentId}")
-    public ResponseEntity<CommentDTO> createReply(@PathVariable Long postId, @PathVariable Long parentId, @RequestBody CommentDTO dto) {
+    public ResponseEntity<CommentDTO> createReply(
+            @PathVariable Long postId,
+            @PathVariable Long parentId,
+            @RequestBody CommentDTO dto) {
 
-        CommentDTO createDto = commentService.createReply(postId, dto);
+        CommentDTO createDto = commentService.createReply(parentId, dto);
 
         return ResponseEntity.status(HttpStatus.OK).body(createDto);
     }
@@ -60,8 +61,9 @@ public class CommentController {
     @DeleteMapping("/{postId}/comment/{commentId}")
     public ResponseEntity<CommentDTO> delete(@PathVariable Long id, @RequestBody CommentDTO dto) {
 
-        CommentDTO deleteDto = commentService.update(id, dto);
+        CommentDTO deleteDto = commentService.delete(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(deleteDto);
     }
 }
+

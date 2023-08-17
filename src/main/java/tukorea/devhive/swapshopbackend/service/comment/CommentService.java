@@ -35,6 +35,7 @@ public class CommentService {
         Post post = postRepository.findById(postId).orElseThrow(() ->
                 new IllegalArgumentException("댓글 쓰기 실패 : 해당 게시글이 존재하지 않습니다."));
 
+        System.out.printf("앳긓id: "+dto.getId());
         Comment comment = Comment.createComment(dto, post);
         Comment created = commentRepository.save(comment);
         return CommentDTO.createCommentDto(created);
@@ -46,7 +47,8 @@ public class CommentService {
         Comment parentComment = commentRepository.findById(parentCommentId).orElseThrow(() ->
                 new IllegalArgumentException("대댓글 쓰기 실패 : 해당 댓글이 존재하지 않습니다."));
 
-        Comment reply = Comment.createReply(dto, parentComment);
+        Post post = parentComment.getPost();
+        Comment reply = Comment.createReply(dto, post, parentComment);
         reply = commentRepository.save(reply);
         return CommentDTO.createCommentDto(reply);
     }
