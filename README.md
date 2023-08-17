@@ -1,19 +1,21 @@
 ## 📚 프로젝트 소개
-<div style="text-align:center;">
-<img src="https://img.shields.io/badge/springboot-6DB33F?style=flat-square&logo=springboot&logoColor=white">
-<img src="https://img.shields.io/badge/docker-2496ED?style=flat-square&logo=docker&logoColor=black">
-<img src="https://img.shields.io/badge/mysql-4479A1?style=flat-square&logo=mysql&logoColor=white">
-<img src="https://img.shields.io/badge/amazonaws-232F3E?style=flat-square&logo=amazons3&logoColor=white">
+<div align="center">
+  <img src="https://img.shields.io/badge/springboot-6DB33F?style=flat-square&logo=springboot&logoColor=white">
+  <img src="https://img.shields.io/badge/docker-2496ED?style=flat-square&logo=docker&logoColor=black">
+  <img src="https://img.shields.io/badge/mysql-4479A1?style=flat-square&logo=mysql&logoColor=white">
+  <img src="https://img.shields.io/badge/amazonaws-232F3E?style=flat-square&logo=amazons3&logoColor=white">
 </div>
 
-<div style="text-align:center;">
+
+<div align="center">
 
 <img width="30%" alt="스크린샷 2023-08-17 오후 8 24 49" src="https://github.com/SangWoon123/swapshop-backend/assets/100204926/fce853d6-399c-4df8-b91e-e912d38e5a6e"/>
 
 </div>
-<div style="text-align:center;">
+<div align="center">
  한국OO대학교 중고서적 거래 플랫폼 
 </div>
+
 
  ## 🗓️ 프로젝트 기간
 23/07/04~
