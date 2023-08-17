@@ -8,9 +8,9 @@ import tukorea.devhive.swapshopbackend.bean.S3Uploader;
 import tukorea.devhive.swapshopbackend.model.Enum.login.AuthenticationType;
 import tukorea.devhive.swapshopbackend.model.category.Category;
 import tukorea.devhive.swapshopbackend.model.dao.comment.Comment;
-import tukorea.devhive.swapshopbackend.model.dao.login.Login;
 import tukorea.devhive.swapshopbackend.model.dao.post.Image;
 import tukorea.devhive.swapshopbackend.model.dao.post.Post;
+import tukorea.devhive.swapshopbackend.model.dao.login.Login;
 import tukorea.devhive.swapshopbackend.model.dto.CategoryDTO;
 import tukorea.devhive.swapshopbackend.model.dto.comment.CommentDTO;
 import tukorea.devhive.swapshopbackend.model.dto.login.LoginDTO;
@@ -20,8 +20,10 @@ import tukorea.devhive.swapshopbackend.repository.comment.CommentRepository;
 import tukorea.devhive.swapshopbackend.repository.login.LoginRepository;
 import tukorea.devhive.swapshopbackend.repository.post.PostRepository;
 import tukorea.devhive.swapshopbackend.service.category.CategoryService;
+import tukorea.devhive.swapshopbackend.service.comment.CommentService;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
@@ -194,7 +196,7 @@ public class PostService {
     public PostDTO mapToDto(Post post){
         return PostDTO.builder()
                 .id(post.getId())
-                //.login(post.getLogin())
+                .userId(post.getLogin().getId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .price(post.getPrice())
@@ -225,7 +227,6 @@ public class PostService {
         for (Comment comment : comments) {
             CommentDTO commentDTO = CommentDTO.builder()
                     .id(comment.getId())
-                    .content((comment.getContent()))
                     .build();
             commentDTOList.add(commentDTO);
         }

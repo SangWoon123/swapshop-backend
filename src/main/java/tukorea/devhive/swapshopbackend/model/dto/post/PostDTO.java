@@ -20,8 +20,7 @@ import java.util.List;
 public class PostDTO {
     private Long id;
 
-    @JsonIgnore
-    private Login login;
+    private Long userId;
 
     private String title;
     private String content;
@@ -39,9 +38,9 @@ public class PostDTO {
     private List<CommentDTO> comment;
 
     @Builder
-    public PostDTO(Long id, Login login, String title, String content, int price, String location, TradePeriod desiredTime, TradeStatus status, int views, List<ImageDTO> images, CategoryDTO category, List<CommentDTO> comment) {
+    public PostDTO(Long id, Long userId, String title, String content, int price, String location, TradePeriod desiredTime, TradeStatus status, int views, List<ImageDTO> images, CategoryDTO category, List<CommentDTO> comment) {
         this.id = id;
-        this.login = login;
+        this.userId = userId;
         this.title = title;
         this.content = content;
         this.price = price;
@@ -57,7 +56,6 @@ public class PostDTO {
     public Post toEntity(){
         return Post.builder()
                 .id(id)
-                .login(login)
                 .title(title)
                 .content(content)
                 .price(price)
