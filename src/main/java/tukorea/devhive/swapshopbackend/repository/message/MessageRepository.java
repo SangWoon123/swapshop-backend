@@ -9,4 +9,6 @@ import java.util.List;
 public interface MessageRepository extends JpaRepository<Message,Long> {
     List<Message> findAllByReceiver(Login user);
     List<Message> findAllBySender(Login user);
+
+    Message findTopBySenderAndReceiverOrSenderAndReceiverOrderByCreatedAtDesc(Login sender1, Login receiver1, Login sender2, Login receiver2);
 }
