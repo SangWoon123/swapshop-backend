@@ -42,16 +42,34 @@ public class CommentService {
     }
 
     // 대댓글 생성
+//    @Transactional
+//    public CommentDTO createReply(Long parentCommentId, CommentDTO dto) {
+//        Comment parentComment = commentRepository.findById(parentCommentId).orElseThrow(() ->
+//                new IllegalArgumentException("대댓글 쓰기 실패 : 해당 댓글이 존재하지 않습니다."));
+//
+//        Post post = parentComment.getPost();
+//        Comment reply = Comment.createReply(dto, post, parentComment);
+//        reply = commentRepository.save(reply);
+//        return CommentDTO.createCommentDto(reply);
+//    }
+
+    // 대댓글 생성
     @Transactional
-    public CommentDTO createReply(Long parentCommentId, CommentDTO dto) {
+    public CommentDTO createReply(Long PostId, Long parentCommentId, CommentDTO dto) {
         Comment parentComment = commentRepository.findById(parentCommentId).orElseThrow(() ->
                 new IllegalArgumentException("대댓글 쓰기 실패 : 해당 댓글이 존재하지 않습니다."));
 
         Post post = parentComment.getPost();
         Comment reply = Comment.createReply(dto, post, parentComment);
         reply = commentRepository.save(reply);
-        return CommentDTO.createCommentDto(reply);
+
+        dto.setId(reply.getId());                 // comment id
+        dto.setPostId(post.getId());              // postID
+        dto.setParentCommentId(parentCommentId);  // 대댓글 id
+
+        return dto;
     }
+
 
     // 댓글 수정
     @Transactional

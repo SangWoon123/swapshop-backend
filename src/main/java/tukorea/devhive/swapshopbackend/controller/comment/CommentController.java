@@ -42,7 +42,7 @@ public class CommentController {
             @PathVariable Long parentId,
             @RequestBody CommentDTO dto) {
 
-        CommentDTO createDto = commentService.createReply(parentId, dto);
+        CommentDTO createDto = commentService.createReply(postId, parentId, dto);
 
         return ResponseEntity.status(HttpStatus.OK).body(createDto);
     }

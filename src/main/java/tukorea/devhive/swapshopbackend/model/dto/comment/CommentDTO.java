@@ -14,8 +14,8 @@ public class CommentDTO {
     private Long postId;
     private String nickname;
     private String content;
-//    private Comment parentComment;
     private Long parentCommentId;
+//    private Comment parentComment;
 
     @Builder
     public CommentDTO(Long id, Long postId, String content, String nickname) {
