@@ -197,6 +197,8 @@ public class PostService {
         return PostDTO.builder()
                 .id(post.getId())
                 .userId(post.getLogin().getId())
+                .nickname(post.getLogin().getNickname())
+                .major(post.getLogin().getMajor())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .price(post.getPrice())

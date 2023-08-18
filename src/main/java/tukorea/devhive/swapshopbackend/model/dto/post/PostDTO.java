@@ -1,14 +1,8 @@
 package tukorea.devhive.swapshopbackend.model.dto.post;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import tukorea.devhive.swapshopbackend.model.Enum.post.TradeStatus;
 import tukorea.devhive.swapshopbackend.model.dao.TradePeriod;
-import tukorea.devhive.swapshopbackend.model.dao.login.Login;
-import tukorea.devhive.swapshopbackend.model.dao.post.Post;
 import tukorea.devhive.swapshopbackend.model.dto.CategoryDTO;
 import tukorea.devhive.swapshopbackend.model.dto.comment.CommentDTO;
 
@@ -17,11 +11,17 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class PostDTO {
     private Long id;
 
+    // 글 작성시 프론트에게 넘겨줄 유저 정보
     private Long userId;
+    private String nickname;
+    private String major;
 
+    // 게시물 생성시 전달할 게시물 정보
     private String title;
     private String content;
     private int price;
@@ -30,41 +30,12 @@ public class PostDTO {
     private TradeStatus status;
     private int views;
 
-
+    // 이미지 정보
     private List<ImageDTO> images;
 
+    // 카테고리
     private CategoryDTO category;
 
+    // 댓글
     private List<CommentDTO> comment;
-
-    @Builder
-    public PostDTO(Long id, Long userId, String title, String content, int price, String location, TradePeriod desiredTime, TradeStatus status, int views, List<ImageDTO> images, CategoryDTO category, List<CommentDTO> comment) {
-        this.id = id;
-        this.userId = userId;
-        this.title = title;
-        this.content = content;
-        this.price = price;
-        this.location = location;
-        this.desiredTime = desiredTime;
-        this.status = status;
-        this.views = views;
-        this.images = images;
-        this.category = category;
-        this.comment = comment;
-    }
-
-    public Post toEntity(){
-        return Post.builder()
-                .id(id)
-                .title(title)
-                .content(content)
-                .price(price)
-                .location(location)
-                .desiredTime(desiredTime)
-                .status(status)
-                .views(views)
-                .build();
-    }
-
-
 }
