@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import tukorea.devhive.swapshopbackend.model.dao.comment.Comment;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @ToString
@@ -14,15 +16,20 @@ public class CommentDTO {
     private Long postId;
     private String nickname;
     private String content;
-//    private Comment parentComment;
     private Long parentCommentId;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+//    private Comment parentComment;
 
     @Builder
-    public CommentDTO(Long id, Long postId, String content, String nickname) {
+    public CommentDTO(Long id, Long postId, String content, String nickname, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.postId = postId;
         this.content = content;
         this.nickname = nickname;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+
     }
 
     public static CommentDTO createCommentDto(Comment comment) {
@@ -30,7 +37,9 @@ public class CommentDTO {
                 comment.getId(),
                 comment.getPost().getId(),
                 comment.getContent(),
-                comment.getNickname()
+                comment.getNickname(),
+                comment.getCreatedDate(),
+                comment.getUpdatedDate()
         );
     }
 

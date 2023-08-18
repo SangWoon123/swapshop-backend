@@ -42,14 +42,14 @@ public class CommentController {
             @PathVariable Long parentId,
             @RequestBody CommentDTO dto) {
 
-        CommentDTO createDto = commentService.createReply(parentId, dto);
+        CommentDTO createDto = commentService.createReply(postId, parentId, dto);
 
         return ResponseEntity.status(HttpStatus.OK).body(createDto);
     }
 
 
     // 수정
-    @PatchMapping("/{postId}/comment/{commentId}")
+    @PatchMapping("/{postId}/comment/{id}")
     public ResponseEntity<CommentDTO> update(@PathVariable Long id, @RequestBody CommentDTO dto) {
 
         CommentDTO updateDto = commentService.update(id, dto);
@@ -58,7 +58,7 @@ public class CommentController {
     }
 
     // 삭제
-    @DeleteMapping("/{postId}/comment/{commentId}")
+    @DeleteMapping("/{postId}/comment/{id}")
     public ResponseEntity<CommentDTO> delete(@PathVariable Long id, @RequestBody CommentDTO dto) {
 
         CommentDTO deleteDto = commentService.delete(id);
