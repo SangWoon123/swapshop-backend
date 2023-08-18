@@ -1,16 +1,15 @@
 package tukorea.devhive.swapshopbackend.model.dto.post;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import tukorea.devhive.swapshopbackend.model.Enum.post.TradeStatus;
 import tukorea.devhive.swapshopbackend.model.dao.TradePeriod;
-import tukorea.devhive.swapshopbackend.model.dao.login.Login;
 import tukorea.devhive.swapshopbackend.model.dao.post.Post;
 import tukorea.devhive.swapshopbackend.model.dto.CategoryDTO;
 import tukorea.devhive.swapshopbackend.model.dto.comment.CommentDTO;
+import tukorea.devhive.swapshopbackend.model.dto.login.LoginDTO;
 
 import java.util.List;
 
@@ -21,6 +20,7 @@ public class PostDTO {
     private Long id;
 
     private Long userId;
+    private LoginDTO login;
 
     private String title;
     private String content;
@@ -38,9 +38,10 @@ public class PostDTO {
     private List<CommentDTO> comment;
 
     @Builder
-    public PostDTO(Long id, Long userId, String title, String content, int price, String location, TradePeriod desiredTime, TradeStatus status, int views, List<ImageDTO> images, CategoryDTO category, List<CommentDTO> comment) {
+    public PostDTO(Long id, Long userId, LoginDTO login, String title, String content, int price, String location, TradePeriod desiredTime, TradeStatus status, int views, List<ImageDTO> images, CategoryDTO category, List<CommentDTO> comment) {
         this.id = id;
         this.userId = userId;
+        this.login = login;
         this.title = title;
         this.content = content;
         this.price = price;

@@ -194,9 +194,11 @@ public class PostService {
     }
 
     public PostDTO mapToDto(Post post) {
+
         return PostDTO.builder()
                 .id(post.getId())
                 .userId(post.getLogin().getId())
+                .login(mapLoginToDto(post.getLogin()))
                 .title(post.getTitle())
                 .content(post.getContent())
                 .price(post.getPrice())
@@ -252,10 +254,20 @@ public class PostService {
                 .build();
     }
 
+    public LoginDTO mapLoginToDto(Login login){
+        return LoginDTO.builder()
+                .userId(login.getId())
+                .email(login.getEmail())
+                .nickname(login.getNickname())
+                .major(login.getMajor())
+                .introduction(login.getIntroduction())
+                .authenticationType(login.getAuthType())
+                .build();
+    }
+
 
     // 조회수
     @Transactional
-
     public int updateView(HttpServletRequest request, HttpServletResponse response, @Param("id") Long id) {
         Cookie[] cookies = request.getCookies();
         boolean checkCookie = false;
