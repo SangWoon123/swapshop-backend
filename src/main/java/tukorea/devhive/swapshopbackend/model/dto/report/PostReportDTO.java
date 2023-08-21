@@ -9,11 +9,13 @@ import tukorea.devhive.swapshopbackend.model.dao.report.PostReport;
 @NoArgsConstructor
 public class PostReportDTO {
 
+    private Long id;
     private Long reportedPostId;
     private String content;
 
     public static PostReportDTO toDto(PostReport postReport){
         return new PostReportDTO(
+                postReport.getId(),
                 postReport.getReportedPostId(),
                 postReport.getContent()
         );

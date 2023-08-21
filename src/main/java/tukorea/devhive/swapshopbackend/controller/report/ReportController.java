@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import tukorea.devhive.swapshopbackend.model.dto.login.LoginDTO;
 import tukorea.devhive.swapshopbackend.model.dto.report.PostReportDTO;
 import tukorea.devhive.swapshopbackend.model.dto.report.UserReportDTO;
-import tukorea.devhive.swapshopbackend.repository.login.LoginRepository;
 import tukorea.devhive.swapshopbackend.service.report.ReportService;
 
 @RestController
@@ -16,14 +15,13 @@ import tukorea.devhive.swapshopbackend.service.report.ReportService;
 public class ReportController {
 
     private final ReportService reportService;
-    private final LoginRepository loginRepository;
 
     // 게시글 신고
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/post")
     public PostReportDTO reportPost(@RequestBody PostReportDTO postReportDTO,
                                     @AuthenticationPrincipal LoginDTO userDto) {
-        postReportDTO.setReportedPostId(userDto.getUserId());
+        postReportDTO.setId(userDto.getUserId());
         return reportService.reportPost(postReportDTO, userDto);
     }
 
@@ -32,7 +30,8 @@ public class ReportController {
     @PostMapping("/user")
     public UserReportDTO reportUser(@RequestBody UserReportDTO userReportDTO,
                                     @AuthenticationPrincipal LoginDTO userDto) {
-        userReportDTO.setReportedUserId(userDto.getUserId());
+        userReportDTO.setId(userDto.getUserId());
         return reportService.reportUser(userReportDTO, userDto);
     }
 }
+

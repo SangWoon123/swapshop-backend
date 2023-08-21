@@ -34,7 +34,7 @@ public class UserReport extends BaseTimeEntity {
     private LocalDateTime createdAt;
 
     @Builder
-    public UserReport(Long id, Long reportedUserId,String content, Login userReporter,LocalDateTime createdAt) {
+    public UserReport(Long id, Long reportedUserId, String content, Login userReporter, LocalDateTime createdAt) {
         this.id = id;
         this.reportedUserId = reportedUserId;
         this.content = content;

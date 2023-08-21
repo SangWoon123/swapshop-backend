@@ -12,4 +12,10 @@ public class ExceptionController {
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException exception){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
+
+    @ExceptionHandler(ReportAlreadyExistsException.class)
+    public ResponseEntity<String> handleReportAlreadyExistsException(ReportAlreadyExistsException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
 }
