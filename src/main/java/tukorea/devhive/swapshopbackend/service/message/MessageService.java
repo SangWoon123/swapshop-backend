@@ -37,6 +37,11 @@ public class MessageService {
         // 보낸사람
         Login sender=loginRepository.findByNickname(userDto.getNickname());
 
+        // 자기 자신에게 쪽지를 보내는 경우 예외 처리
+        if (sender.equals(receiver)) {
+            throw new IllegalArgumentException("자기 자신에게 쪽지를 보낼 수 없습니다.");
+        }
+
         // 쪽지함 생성 또는 찾기 = 쪽지함 반환
         MessageRoom messageRoom = createOrFindMessageRoom(sender, receiver);
 
@@ -142,6 +147,11 @@ public class MessageService {
         // 사용자 ID를 비교하여 정렬
         Login sender = userA.getId() < userB.getId() ? userA : userB;
         Login receiver = userA.getId() < userB.getId() ? userB : userA;
+
+        // 자기 자신에게 쪽지를 보내는 경우 예외 처리
+        if (sender.equals(receiver)) {
+            throw new IllegalArgumentException("자기 자신에게 쪽지를 보낼 수 없습니다.");
+        }
 
         Optional<MessageRoom> existingMessage = messageRoomRepository.findMessageRoomByUserAAndUserB(sender, receiver);
 
