@@ -1,4 +1,4 @@
-## 📚 프로젝트 소개
+## 프로젝트 소개
 <div align="center">
   <img src="https://img.shields.io/badge/springboot-6DB33F?style=flat-square&logo=springboot&logoColor=white">
   <img src="https://img.shields.io/badge/docker-2496ED?style=flat-square&logo=docker&logoColor=black">
@@ -17,14 +17,14 @@
 </div>
 
 
- ## 🗓️ 프로젝트 기간
+ ##  프로젝트 기간
 23/07/04~
 
-## 📺 front: 
+##  front: 
 https://github.com/play3step/SwapShop-front 
 
 
-## 📦 어플리케이션 기능: 
+##  어플리케이션 기능: 
 - 로그인 (카카오, 구글)
 - 관리자
 - 게시글 작성
