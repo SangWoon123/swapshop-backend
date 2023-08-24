@@ -59,11 +59,12 @@ public class CommentController {
 
     // 삭제
     @DeleteMapping("/{postId}/comment/{id}")
-    public ResponseEntity<CommentDTO> delete(@PathVariable Long id, @RequestBody CommentDTO dto) {
+    public ResponseEntity<CommentDTO> delete(@PathVariable("id") Long id) {
 
         CommentDTO deleteDto = commentService.delete(id);
 
-        return ResponseEntity.status(HttpStatus.OK).body(deleteDto);
+        return ResponseEntity.ok(deleteDto);
+//        return ResponseEntity.status(HttpStatus.OK).body(deleteDto)
     }
 }
 
