@@ -5,8 +5,6 @@ spring:
     username: root
     password: 1234
 
-
-
   jpa:
     show-sql: true
     hibernate:
@@ -15,7 +13,13 @@ spring:
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
       hibernate:
         format_sql: true
-    defer-datasource-initialization: true
+
+# Admin Server 설정
+  boot:
+    admin:
+      client:
+        instance:
+          service-url: http://localhost:8000
 
   profiles:
     include: oauth
