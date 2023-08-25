@@ -28,6 +28,8 @@ public class MessageService {
     private final MessageRoomRepository messageRoomRepository;
 
 
+
+    // 쪽지 생성 메서드
     @Transactional
     public MessageDTO write(MessageDTO messageDto, LoginDTO userDto){
 
@@ -59,6 +61,7 @@ public class MessageService {
         return MessageDTO.toDto(message);
     }
 
+    // 모든 쪽지함을 조회
     @Transactional
     public List<RoomDTO> allMessage(LoginDTO userDto){
 
@@ -69,6 +72,7 @@ public class MessageService {
 
         List<RoomDTO> roomDTOList = new ArrayList<>();
 
+        // 최근 메시지를 누가 보냈는지 처리
         List<Message> sentMessages = messageRepository.findAllBySender(user);
         for (Message message : sentMessages) {
             if (!otherUserNicknames.contains(message.getReceiver().getNickname())) {
@@ -121,7 +125,7 @@ public class MessageService {
 
 
         return messages.stream()
-                .filter(message -> message.getSender().equals(user) || message.getReceiver().equals(user))
+                .filter(message -> message.getSender().equals(user) || message.getReceiver().equals(user)) // 1차 필터
                 .map(message -> {
                     InboxDTO dto=InboxDTO.toDto(message);
                     if (message.getSender().equals(user)) {
@@ -142,7 +146,13 @@ public class MessageService {
 
     }
 
-
+    /**
+     * 쪽지함생성 or 쪽지함 찾는 메서드
+     *
+     * @param Login userA 로그인 유저 or 다른유저
+     * @param Login userB 로그인 유저 or 다른유저
+     * @return 쪽지함 리턴
+     */
     private MessageRoom createOrFindMessageRoom(Login userA, Login userB) {
         // 사용자 ID를 비교하여 정렬
         Login sender = userA.getId() < userB.getId() ? userA : userB;
@@ -156,9 +166,9 @@ public class MessageService {
         Optional<MessageRoom> existingMessage = messageRoomRepository.findMessageRoomByUserAAndUserB(sender, receiver);
 
         if (existingMessage.isPresent()) {
-            return existingMessage.get();
+            return existingMessage.get();                       // 쪽지함이 존재하면 존재하는 쪽지함을 리턴
         } else {
-            MessageRoom messageRoom = MessageRoom.builder()
+            MessageRoom messageRoom = MessageRoom.builder()         // 없다면 쪽지함을 새로 생성
                     .messages(new ArrayList<>())
                     .userA(sender)
                     .userB(receiver)
@@ -173,11 +183,11 @@ public class MessageService {
                 .orElseThrow(() -> new IllegalArgumentException("쪽지를 찾을 수 없습니다."));
 
         Login user = loginRepository.findByNickname(userDto.getNickname());
-        if (user.equals(message.getSender()) || user.equals(message.getReceiver())) {
-            if (user.equals(message.getSender())) {
+        if (user.equals(message.getSender()) || user.equals(message.getReceiver())) {   //1차필터
+            if (user.equals(message.getSender())) {         // 2차 sender면 sender측 논리적삭제 진행
                 message.deleteBySender();
             }
-            if (user.equals(message.getReceiver())) {
+            if (user.equals(message.getReceiver())) {       // 2차 receiver면 receiver면 논리적삭제 진행
                 message.deleteByReceiver();
             }
 
@@ -197,11 +207,11 @@ public class MessageService {
         MessageRoom room = messageRoomRepository.findById(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("쪽지함을 찾을 수 없습니다."));
 
-        if (user.equals(room.getUserA()) || user.equals(room.getUserB())) {
-            if (user.equals(room.getUserA())) {
+        if (user.equals(room.getUserA()) || user.equals(room.getUserB())) {         // 1차 필터
+            if (user.equals(room.getUserA())) {         // 2차 쪽지함의 UserA면 논리적삭제 진행
                 room.deletedByUserA();
             }
-            if (user.equals(room.getUserB())) {
+            if (user.equals(room.getUserB())) {         // 2차 쪽지함의 UserB면 논리적삭제 진행
                 room.deleteByUserB();
             }
 
