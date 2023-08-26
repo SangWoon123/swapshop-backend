@@ -2,6 +2,7 @@ package tukorea.devhive.swapshopbackend.controller.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,7 @@ public class PostController {
                                           @RequestPart("post") String postJson,
                                           @RequestPart(value="image",required = false) Optional<List<MultipartFile>> image) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-//        objectMapper.registerModule(new JavaTimeModule()); // LocalDateTime 직렬화
+        //objectMapper.registerModule(new JavaTimeModule()); // LocalDateTime 직렬화
         PostDTO postDTO = objectMapper.readValue(postJson, PostDTO.class); // JSON 문자열을 PostDTO 객체로 변환
         PostDTO post = postService.create(userDTO, postDTO, image.orElse(Collections.emptyList()));
         return ResponseEntity.ok(post);
@@ -70,6 +71,12 @@ public class PostController {
                                              @RequestPart(value="image",required = false) List<MultipartFile> image) throws IOException {
         PostDTO update=postService.update(userDTO,postId,postDTO,image);
         return ResponseEntity.ok(update);
+    }
+
+    //페이지네이션 (no-offset 방식 (무한 스크롤))
+    @GetMapping("/api")
+    public Page<PostDTO> getPosts(@RequestParam Long lastPostId,@RequestParam int size){
+        return postService.pagePost(lastPostId,size);
     }
 
 }
