@@ -1,6 +1,8 @@
 package tukorea.devhive.swapshopbackend.service.post;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,9 +10,9 @@ import tukorea.devhive.swapshopbackend.bean.S3Uploader;
 import tukorea.devhive.swapshopbackend.model.Enum.login.AuthenticationType;
 import tukorea.devhive.swapshopbackend.model.category.Category;
 import tukorea.devhive.swapshopbackend.model.dao.comment.Comment;
+import tukorea.devhive.swapshopbackend.model.dao.login.Login;
 import tukorea.devhive.swapshopbackend.model.dao.post.Image;
 import tukorea.devhive.swapshopbackend.model.dao.post.Post;
-import tukorea.devhive.swapshopbackend.model.dao.login.Login;
 import tukorea.devhive.swapshopbackend.model.dto.CategoryDTO;
 import tukorea.devhive.swapshopbackend.model.dto.comment.CommentDTO;
 import tukorea.devhive.swapshopbackend.model.dto.login.LoginDTO;
@@ -20,10 +22,8 @@ import tukorea.devhive.swapshopbackend.repository.comment.CommentRepository;
 import tukorea.devhive.swapshopbackend.repository.login.LoginRepository;
 import tukorea.devhive.swapshopbackend.repository.post.PostRepository;
 import tukorea.devhive.swapshopbackend.service.category.CategoryService;
-import tukorea.devhive.swapshopbackend.service.comment.CommentService;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
@@ -311,5 +311,14 @@ public class PostService {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime tommorow = LocalDateTime.now().plusDays(1L).truncatedTo(ChronoUnit.DAYS);
         return (int) now.until(tommorow, ChronoUnit.SECONDS);
+    }
+
+    public Page<PostDTO> pagePost(Long lastPostId,int size){
+        PageRequest pageable= PageRequest.of(0,size);
+        Page<Post> page=postRepository.findByPostIdLessThanOrderByPostIdDesc(lastPostId,pageable);
+
+        Page<PostDTO> map = page.map(post -> mapToDto(post));
+
+        return map;
     }
 }

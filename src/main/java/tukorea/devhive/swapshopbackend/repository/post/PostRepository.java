@@ -1,5 +1,7 @@
 package tukorea.devhive.swapshopbackend.repository.post;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -24,4 +26,9 @@ public interface PostRepository extends JpaRepository<Post,Long> {
     @Modifying
     @Query("update Post p set p.views = p.views+1 where p.id=:id")
     int updateViews(@Param("id") Long id);
+
+
+    // 페이징 처리
+    @Query(value = "SELECT p FROM Post p WHERE p.id < ?1 ORDER BY p.id desc ")
+    Page<Post> findByPostIdLessThanOrderByPostIdDesc(Long lastPostId, PageRequest pageRequest);
 }
