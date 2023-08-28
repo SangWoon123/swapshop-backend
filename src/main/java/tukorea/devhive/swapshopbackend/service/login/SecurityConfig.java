@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/","/auth/**","/oauth2/**","/post/**","/categories","/**").permitAll()
-                .antMatchers("/security-login/admin/**").hasAuthority(UserRole.ADMIN.name())  // ADMIN인 유저만 진입가능
+                .antMatchers("/security-login/admin/**").hasAuthority(UserRole.ADMIN.name())  // ADMIN인 유저만 진입 가능
                 .anyRequest()
                 .authenticated()
                 .and()
