@@ -9,9 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import tukorea.devhive.swapshopbackend.service.login.CustomOAuth2UserService;
-import tukorea.devhive.swapshopbackend.service.login.JwtAuthFilter;
-import tukorea.devhive.swapshopbackend.service.login.OAuth2SuccessHandler;
+import tukorea.devhive.swapshopbackend.model.Enum.login.UserRole;
 
 @Configuration
 @EnableWebSecurity
@@ -34,6 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/","/auth/**","/oauth2/**","/post/**","/categories","/**").permitAll()
+                .antMatchers("/security-login/admin/**").hasAuthority(UserRole.ADMIN.name())  // ADMIN인 유저만 진입가능
                 .anyRequest()
                 .authenticated()
                 .and()

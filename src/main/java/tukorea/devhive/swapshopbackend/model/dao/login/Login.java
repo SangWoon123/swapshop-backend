@@ -5,8 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import tukorea.devhive.swapshopbackend.model.Enum.login.AuthenticationType;
+import tukorea.devhive.swapshopbackend.model.Enum.login.UserRole;
 import tukorea.devhive.swapshopbackend.model.dao.post.Favorite;
-import tukorea.devhive.swapshopbackend.model.dao.post.Post;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -45,8 +45,10 @@ public class Login {
     @OneToMany(mappedBy = "login")
     private List<Favorite> favorites=new ArrayList<>();
 
+    private UserRole role;
+
     @Builder
-    public Login(Long id, String email, String password, String nickname, String major, String introduction, AuthenticationType authType) {
+    public Login(Long id, String email, String password, String nickname, String major, String introduction, AuthenticationType authType, UserRole role) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -54,6 +56,7 @@ public class Login {
         this.major = major;
         this.introduction = introduction;
         this.authType = authType;
+        this.role = role;
     }
 
     public void update(String nickname,String major,String introduction,String password){
