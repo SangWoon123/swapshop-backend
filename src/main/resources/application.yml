@@ -15,7 +15,6 @@ spring:
         format_sql: true
     defer-datasource-initialization: true
 
-
   # Admin Server 설정
   boot:
     admin:
@@ -31,6 +30,17 @@ spring:
     init:
       mode: always
       data-locations: classpath:sql/data.sql # 서버 시작시 dml sql문을 실행할 위치 및 파일 지정
+
+springdoc:
+  packages-to-scan: tukorea.devhive.swapshopbackend.controller
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+    display-request-duration: true
+    operations-sorter: alpha
+
 
 logging:
   level:
