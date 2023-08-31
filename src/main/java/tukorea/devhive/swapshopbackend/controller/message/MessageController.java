@@ -1,5 +1,7 @@
 package tukorea.devhive.swapshopbackend.controller.message;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,6 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/messages")
 @CrossOrigin(origins = "http://localhost:3000")
+@Tag(name = "Message", description = "쪽지 API Document")
 public class MessageController {
 
     private final MessageService messageService;
@@ -41,6 +44,7 @@ public class MessageController {
      * @param LoginDTO userDto 로그인한 유저
      * @return MessageDTO
      */
+    @Operation(summary = "쪽지 생성", description = "쪽지를 생성합니다.")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
     public MessageDTO sendMessage(@RequestBody MessageDTO messageDTO, @AuthenticationPrincipal LoginDTO userDto){
@@ -56,6 +60,7 @@ public class MessageController {
      * @return 로그인한 유저에게 온 모든 쪽지함 조회 (RoomDTO 참조)
      *
      */
+    @Operation(summary = "쪽지함 조회", description = "쪽지함을 조회합니다.")
     @GetMapping()
     public WrapperBox<List<RoomDTO>> findAllRoom(@AuthenticationPrincipal LoginDTO userDto){
         return new WrapperBox<>(messageService.allMessage(userDto));
@@ -70,6 +75,7 @@ public class MessageController {
      * @param LoginDTO userDto 로그인한 유저
      * @return List<InboxDTO> 참조
      */
+    @Operation(summary = "쪽지함 상세 조회", description = "쪽지함을 자세히 조회합니다.")
     @GetMapping("/{room_id}")
     public WrapperBoxDetail<List<InboxDTO>> search(@PathVariable(value = "room_id") Long id,@AuthenticationPrincipal LoginDTO userDto){
         return new WrapperBoxDetail<>(messageService.messageSearch(id,userDto));
@@ -83,6 +89,7 @@ public class MessageController {
      * @param LoginDTO userDto 로그인한 유저
      * @return X
      */
+    @Operation(summary = "쪽지 삭제", description = "쪽지를 삭제합니다.")
     @DeleteMapping("/{room_id}/{message_id}")
     public void deleteMessage(@PathVariable(value = "message_id") Long messageId,@AuthenticationPrincipal LoginDTO userDto){
         messageService.deleteMessage(messageId,userDto);
@@ -95,6 +102,7 @@ public class MessageController {
      * @param LoginDTO userDto 로그인한 유저
      * @return X
      */
+    @Operation(summary = "쪽지함 전체 삭제", description = "쪽지함 전체를 삭제합니다.")
     @DeleteMapping("/{room_id}")
     public void deleteMessageRoom(@PathVariable(value = "room_id") Long roomId,@AuthenticationPrincipal LoginDTO userDto){
         messageService.deleteMessageRoom(roomId,userDto);

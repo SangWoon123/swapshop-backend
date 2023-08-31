@@ -1,5 +1,7 @@
 package tukorea.devhive.swapshopbackend.controller.report;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,11 +14,13 @@ import tukorea.devhive.swapshopbackend.service.report.ReportService;
 @RestController
 @RequestMapping("/report")
 @RequiredArgsConstructor
+@Tag(name = "Report", description = "신고 API Document")
 public class ReportController {
 
     private final ReportService reportService;
 
     // 게시글 신고
+    @Operation(summary = "게시글 신고", description = "게시글을 신고합니다.")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/post")
     public PostReportDTO reportPost(@RequestBody PostReportDTO postReportDTO,
@@ -26,6 +30,7 @@ public class ReportController {
     }
 
     // 유저 신고
+    @Operation(summary = "유저 신고", description = "유저를 신고합니다.")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/user")
     public UserReportDTO reportUser(@RequestBody UserReportDTO userReportDTO,
