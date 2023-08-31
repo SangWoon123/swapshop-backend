@@ -5,7 +5,7 @@
 
 
 
-### ✈️ 소개
+## ✈️ 소개
 대학교 중고서적 거래 플랫폼으로 한국공학대학교 2023년 2학기 시간표기준으로 필요한 대학교재를 거래할수 있는 서비스를 제공합니다.
 
 
@@ -18,9 +18,10 @@
 <img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white">
 <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
 <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
-</div>
+</div>      
 
-※ 도커는 개발시 사용x, 공부용으로 사용
+<h6>※ 도커는 개발시 사용x, 공부용으로 사용</h6>
+
 <br>
 
 ## 실행방법
@@ -73,7 +74,7 @@ https://file.notion.so/f/s/cf4954b1-a768-4bfc-91c6-5e76196739f1/SWAPSHOP_(1).pdf
 <br>
 
 
-### 📝 기능 개발 현황
+## 📝 기능 개발 현황
 - 23/07/12: 스프링 oauth2.0 로그인 구현 (구글,카카오) --> ※프론트 연결 O
 - 23/07/19: 게시물 작성 구현 --> ※프론트 연결 O
 - 23/07/26:
