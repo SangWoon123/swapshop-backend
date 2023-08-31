@@ -13,7 +13,6 @@
 ## 📖 기술 스택
 <div>
 <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white">
-<img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
 <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
 <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> 
 <img src="https://img.shields.io/badge/docker-4479A1?style=for-the-badge&logo=docker&logoColor=white">
@@ -65,6 +64,11 @@ https://file.notion.so/f/s/cf4954b1-a768-4bfc-91c6-5e76196739f1/SWAPSHOP_(1).pdf
 <br>
 
 ## 📃 API
+```
+// 실행 방법 : 백엔드 서버 연결 후 접속
+http://localhost:8080/swagger-ui/index.html#/
+```
+
 ![image](https://github.com/why-only-english/Programmers/assets/114092152/29292426-5a7a-4159-805e-59c26f17abe7)
 
 <br>
