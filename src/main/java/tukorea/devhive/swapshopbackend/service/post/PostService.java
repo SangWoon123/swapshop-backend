@@ -11,11 +11,13 @@ import tukorea.devhive.swapshopbackend.model.Enum.login.AuthenticationType;
 import tukorea.devhive.swapshopbackend.model.category.Category;
 import tukorea.devhive.swapshopbackend.model.dao.comment.Comment;
 import tukorea.devhive.swapshopbackend.model.dao.login.Login;
+import tukorea.devhive.swapshopbackend.model.dao.post.Favorite;
 import tukorea.devhive.swapshopbackend.model.dao.post.Image;
 import tukorea.devhive.swapshopbackend.model.dao.post.Post;
 import tukorea.devhive.swapshopbackend.model.dto.CategoryDTO;
 import tukorea.devhive.swapshopbackend.model.dto.comment.CommentDTO;
 import tukorea.devhive.swapshopbackend.model.dto.login.LoginDTO;
+import tukorea.devhive.swapshopbackend.model.dto.post.FavoriteDTO;
 import tukorea.devhive.swapshopbackend.model.dto.post.ImageDTO;
 import tukorea.devhive.swapshopbackend.model.dto.post.PostDTO;
 import tukorea.devhive.swapshopbackend.repository.comment.CommentRepository;
@@ -60,9 +62,9 @@ public class PostService {
                 .title(postDTO.getTitle())
                 .content(postDTO.getContent())
                 .price(postDTO.getPrice())
-                .location(postDTO.getLocation())
-                .desiredTime(postDTO.getDesiredTime())
-                .status(postDTO.getStatus())
+//                .location(postDTO.getLocation())
+//                .desiredTime(postDTO.getDesiredTime())
+//                .status(postDTO.getStatus())
                 .views(postDTO.getViews())
                 .build();
 
@@ -183,8 +185,7 @@ public class PostService {
         post.setCategory(category);
 
         //변경감지를 통한 업데이트 적용
-        post.update(postDTO.getTitle(), postDTO.getContent(), postDTO.getPrice(), postDTO.getLocation(), postDTO.getDesiredTime()
-                , postDTO.getStatus(), postDTO.getViews(), updatedImages);
+        post.update(postDTO.getTitle(), postDTO.getContent(), postDTO.getPrice(), postDTO.getViews(), updatedImages);
 
         // 게시물 업데이트
         Post updatedPost = postRepository.save(post);
@@ -203,16 +204,25 @@ public class PostService {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .price(post.getPrice())
-                .location(post.getLocation())
-                .desiredTime(post.getDesiredTime())
+//                .location(post.getLocation())
+//                .desiredTime(post.getDesiredTime())
+//                .status(post.getStatus())
                 .views(post.getViews())
-                .status(post.getStatus())
                 .images(mapImageToDto(post.getImages()))
                 .category(mapCategoryToDto(post.getCategory()))
                 .comment(mapCommentToDto(post.getComments()))
+                .favorite(mapFavoriteToDto(post.getFavorites()))
                 .build();
     }
 
+    /**
+     * domain클래스 DTO로 전환
+     *
+     *  map{domain}ToDto로 된 모든 메서드
+     *
+     * @param domain
+     * @return DTO
+     */
     private List<ImageDTO> mapImageToDto(List<Image> images) {
         List<ImageDTO> imageDTOList = new ArrayList<>();
         for (Image image : images) {
@@ -225,6 +235,34 @@ public class PostService {
         return imageDTOList;
     }
 
+    /**
+     * domain클래스 DTO로 전환
+     *
+     *  map{domain}ToDto로 된 모든 메서드
+     *
+     * @param domain
+     * @return DTO
+     */
+    private List<FavoriteDTO> mapFavoriteToDto(List<Favorite> favorites) {
+        List<FavoriteDTO> favoriteDTOS = new ArrayList<>();
+        for (Favorite favorite : favorites) {
+            FavoriteDTO favoriteDTO= FavoriteDTO.builder()
+                    .postId(favorite.getPost().getId())
+                    .nickName(favorite.getLogin().getNickname())
+                    .build();
+            favoriteDTOS.add(favoriteDTO);
+        }
+        return favoriteDTOS;
+    }
+
+    /**
+     * domain클래스 DTO로 전환
+     *
+     *  map{domain}ToDto로 된 모든 메서드
+     *
+     * @param domain
+     * @return DTO
+     */
     private List<CommentDTO> mapCommentToDto(List<Comment> comments) {
         List<CommentDTO> commentDTOList = new ArrayList<>();
         for (Comment comment : comments) {
@@ -246,23 +284,20 @@ public class PostService {
         return commentDTOList;
     }
 
+    /**
+     * domain클래스 DTO로 전환
+     *
+     *  map{domain}ToDto로 된 모든 메서드
+     *
+     * @param domain
+     * @return DTO
+     */
     private CategoryDTO mapCategoryToDto(Category category) {
         return CategoryDTO.builder()
                 .name(category.getName())
                 .professor(category.getProfessor())
                 .major(category.getMajor())
                 .code(category.getCode())
-                .build();
-    }
-
-    public LoginDTO mapLoginToDto(Login login){
-        return LoginDTO.builder()
-                .userId(login.getId())
-                .email(login.getEmail())
-                .nickname(login.getNickname())
-                .major(login.getMajor())
-                .introduction(login.getIntroduction())
-                .authenticationType(login.getAuthType())
                 .build();
     }
 

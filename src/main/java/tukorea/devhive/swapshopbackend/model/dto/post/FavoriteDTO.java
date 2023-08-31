@@ -13,9 +13,11 @@ import tukorea.devhive.swapshopbackend.model.dto.login.LoginDTO;
 @NoArgsConstructor
 public class FavoriteDTO {
     private Long postId;
+    private String nickName;
 
     @Builder
-    public FavoriteDTO(Long postId) {
+    public FavoriteDTO(Long postId, String nickName) {
         this.postId = postId;
+        this.nickName = nickName;
     }
 }
