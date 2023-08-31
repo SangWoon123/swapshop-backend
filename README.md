@@ -21,6 +21,7 @@
 </div>
 
 ※ 도커는 개발시 사용x, 공부용으로 사용
+<br>
 
 ### 실행방법
 - 기본
@@ -34,20 +35,26 @@
 - Docker
   ```
   1. cd swapshop-backend
+
   2. docker build -t swapshop-back .
+  
   3. docker run -p 8080:8080 swapshop-back
   ```
+<br>
 
 
  ### 📆 프로젝트 기간
 23/07/04 ~ 23/09/03
+<br>
 
 ### 💻 front: 
 https://github.com/play3step/SwapShop-front 
+<br>
 
 
 ### 🎨 디자인
 https://file.notion.so/f/s/cf4954b1-a768-4bfc-91c6-5e76196739f1/SWAPSHOP_(1).pdf?id=ef065016-8595-47c5-929a-7b753323090d&table=block&spaceId=562dc26d-30d6-4664-924b-fe26e27d85d5&expirationTimestamp=1693555200000&signature=N06c7kAcUtAiOEg-ZA3yFgfep8gOnZH75tPQAYektNs&downloadName=SWAPSHOP+%281%29.pdf
+<br>
 
 ### 📝 어플리케이션 기능
 - 기능 요약
@@ -63,6 +70,7 @@ https://file.notion.so/f/s/cf4954b1-a768-4bfc-91c6-5e76196739f1/SWAPSHOP_(1).pdf
   - 쪽지 보내기
   - 1:1 채팅
   - 카테고리 
+<br>
 
 
 ### 📝 기능 개발 현황
@@ -75,6 +83,7 @@ https://file.notion.so/f/s/cf4954b1-a768-4bfc-91c6-5e76196739f1/SWAPSHOP_(1).pdf
 - 23/07/27: 게시글 찜하기 완료 --> ※프론트 연결 O
 - 23/08/03: 게시글 대댓글 구현 완료 --> ※프론트 연결 O
 - 23/08/17: 쪽지 기능 구현 완료 -> ※프론트 연결 O
+<br>
 
 ### 📃 API
 ```
@@ -83,9 +92,11 @@ http://localhost:8080/swagger-ui/index.html#/
 ```
 
 ![image](https://github.com/why-only-english/Programmers/assets/114092152/29292426-5a7a-4159-805e-59c26f17abe7)
+<br>
 
 ### ➡️️ Flowchart
 ![image](https://github.com/why-only-english/Programmers/assets/114092152/a620064c-99a5-431d-ba94-bd274fcef96d)
+<br>
 
 ### 📑 ERD
 ![image](https://github.com/why-only-english/Programmers/assets/114092152/209714f8-886b-4052-89c2-2e49b79f9afe)
