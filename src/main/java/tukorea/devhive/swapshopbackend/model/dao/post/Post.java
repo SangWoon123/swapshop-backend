@@ -42,15 +42,15 @@ public class Post extends BaseTimeEntity {
     @Column(name = "price")
     private int price;
 
-    @Column(name = "desired_location")
-    private String location;
+//    @Column(name = "desired_location") 거래 위치
+//    private String location;
+//
+//    @Column(name = "desired_time_range") 거래 희망 시간
+//    @Embedded
+//    private TradePeriod desiredTime; // @Embedded 타입으로 변경 필요
 
-    @Column(name = "desired_time_range")
-    @Embedded
-    private TradePeriod desiredTime; // @Embedded 타입으로 변경 필요
-
-    @Column(name = "status")
-    private TradeStatus status;
+//    @Column(name = "status") 거래 상태
+//    private TradeStatus status;
 
     @Column(name = "views",columnDefinition = "integer default 0", nullable = false)
     private int views;
@@ -76,21 +76,21 @@ public class Post extends BaseTimeEntity {
         this.title = title;
         this.content = content;
         this.price = price;
-        this.location = location;
-        this.desiredTime = desiredTime;
-        this.status = status;
+//        this.location = location;
+//        this.desiredTime = desiredTime;
+//        this.status = status;
         this.views = views;
         this.images = images;
         this.category = category;
     }
 
-    public void update(String title, String content, int price, String location, TradePeriod desiredTime, TradeStatus status, int views, List<Image> images) {
+    public void update(String title, String content, int price, int views, List<Image> images) {
         this.title = title;
         this.content = content;
         this.price = price;
-        this.location = location;
-        this.desiredTime = desiredTime;
-        this.status = status;
+//        this.location = location;
+//        this.desiredTime = desiredTime;
+//        this.status = status;
         this.views = views;
         changeImage(images);
     }

@@ -3,6 +3,7 @@ package tukorea.devhive.swapshopbackend.model.dto.post;
 import lombok.*;
 import tukorea.devhive.swapshopbackend.model.Enum.post.TradeStatus;
 import tukorea.devhive.swapshopbackend.model.dao.TradePeriod;
+import tukorea.devhive.swapshopbackend.model.dao.post.Favorite;
 import tukorea.devhive.swapshopbackend.model.dto.CategoryDTO;
 import tukorea.devhive.swapshopbackend.model.dto.comment.CommentDTO;
 
@@ -25,9 +26,9 @@ public class PostDTO {
     private String title;
     private String content;
     private int price;
-    private String location;
-    private TradePeriod desiredTime;
-    private TradeStatus status;
+    //private String location;
+   // private TradePeriod desiredTime;
+    //private TradeStatus status;
     private int views;
 
     // 이미지 정보
@@ -38,4 +39,7 @@ public class PostDTO {
 
     // 댓글
     private List<CommentDTO> comment;
+
+    //좋아요
+    private List<FavoriteDTO> favorite;
 }
