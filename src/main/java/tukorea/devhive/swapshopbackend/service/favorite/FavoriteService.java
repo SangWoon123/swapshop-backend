@@ -69,6 +69,7 @@ public class FavoriteService {
     public FavoriteDTO mapToDTO(Favorite favorite){
         return FavoriteDTO.builder()
                 .postId(favorite.getPost().getId())
+                .nickName(favorite.getLogin().getNickname())
                 .build();
     }
 
