@@ -25,12 +25,16 @@
 <br>
 
  ## 📆 프로젝트 기간
-23/07/04~
-
+23/07/04 ~ 23/09/03
 <br>
 
 ## 💻 front: 
 https://github.com/play3step/SwapShop-front 
+
+<br>
+
+## 🎨 디자인
+https://file.notion.so/f/s/cf4954b1-a768-4bfc-91c6-5e76196739f1/SWAPSHOP_(1).pdf?id=ef065016-8595-47c5-929a-7b753323090d&table=block&spaceId=562dc26d-30d6-4664-924b-fe26e27d85d5&expirationTimestamp=1693555200000&signature=N06c7kAcUtAiOEg-ZA3yFgfep8gOnZH75tPQAYektNs&downloadName=SWAPSHOP+%281%29.pdf
 
 <br>
 
@@ -51,27 +55,32 @@ https://github.com/play3step/SwapShop-front
 - 23/07/12: 스프링 oauth2.0 로그인 구현 (구글,카카오) --> ※프론트 연결 O
 - 23/07/19: 게시물 작성 구현 --> ※프론트 연결 O
 - 23/07/26:
-  - 게시글 댓글 --> ※프론트 연결 X
+  - 게시글 댓글 --> ※프론트 연결 O
   - 게시물 aws s3 사진업로드 구현 --> ※프론트 연결 O
   - 카테고리 영역 DB 저장 --> ※프론트 연결 O
-- 23/07/27: 게시글 찜하기 완료 --> ※프론트 연결 X
-- 23/08/03: 게시글 대댓글 구현 완료 --> ※프론트 연결 X
+- 23/07/27: 게시글 찜하기 완료 --> ※프론트 연결 O
+- 23/08/03: 게시글 대댓글 구현 완료 --> ※프론트 연결 O
 - 23/08/17: 쪽지 기능 구현 완료 -> ※프론트 연결 O
 
 <br>
 
-## 🛠️ 아키텍처
+## 📃 API
+![image](https://github.com/why-only-english/Programmers/assets/114092152/29292426-5a7a-4159-805e-59c26f17abe7)
 
 <br>
 
-## 배포
+## ➡️️ Flowchart
+![image](https://github.com/why-only-english/Programmers/assets/114092152/a620064c-99a5-431d-ba94-bd274fcef96d)
 
 <br>
 
-## 데모 (완성X)
+## 📑 ERD
+![image](https://github.com/why-only-english/Programmers/assets/114092152/209714f8-886b-4052-89c2-2e49b79f9afe)
+
+
+<br>
+
+## 🙋 데모 (완성X)
 
 <img width="50%" src="https://github.com/SangWoon123/swapshop-backend/assets/100204926/f4c7d764-c7b8-48b2-9838-611543b95f36"/>
 
-<br>
-
-## 📂 프로젝트 구조
