@@ -8,6 +8,7 @@ import tukorea.devhive.swapshopbackend.model.dao.post.Favorite;
 import tukorea.devhive.swapshopbackend.model.dao.post.Post;
 import tukorea.devhive.swapshopbackend.model.dto.login.LoginDTO;
 import tukorea.devhive.swapshopbackend.model.dto.post.FavoriteDTO;
+import tukorea.devhive.swapshopbackend.model.dto.post.FavoriteSuccess;
 import tukorea.devhive.swapshopbackend.repository.favorite.FavoriteRepository;
 import tukorea.devhive.swapshopbackend.repository.login.LoginRepository;
 import tukorea.devhive.swapshopbackend.repository.post.PostRepository;
@@ -42,11 +43,11 @@ public class FavoriteService {
         if(existingFavorite==null){
             Favorite favorite=new Favorite(user,post);
             favoriteRepository.save(favorite);
-            return ResponseEntity.ok("찜 목록에 추가되었습니다.");
+            return ResponseEntity.ok(new FavoriteSuccess(true));
         }
 
         favoriteRepository.delete(existingFavorite);
-        return ResponseEntity.ok("찜 목록에서 제거되었습니다.");
+        return ResponseEntity.ok(new FavoriteSuccess(false));
 
     }
 
