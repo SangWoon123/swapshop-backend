@@ -1,6 +1,8 @@
 package tukorea.devhive.swapshopbackend.controller.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +24,13 @@ import java.util.Optional;
 @RequestMapping("/post")
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
+@Tag(name = "Post", description = "게시글 API Document")
 public class PostController {
 
     private final PostService postService;
 
     // 생성
+    @Operation(summary = "게시글 생성", description = "게시글을 생성합니다.")
     @PostMapping
     public ResponseEntity<PostDTO> create(@AuthenticationPrincipal LoginDTO userDTO,
                                           @RequestPart("post") String postJson,
@@ -39,24 +43,28 @@ public class PostController {
     }
 
     // 전체 조회
+    @Operation(summary = "전체 게시글 조회", description = "전체 게시글을 조회합니다.")
     @GetMapping()
     public WrappedResponse<List<PostDTO>> findPosts(){
         return new WrappedResponse<>(true,postService.showList(),"성공");
     }
 
     // 내가 작성한 모든 작성글 조회
+    @Operation(summary = "내가 작성한 게시글 정보 조회", description = "내가 작성한 게시글 정보를 조회합니다.")
     @GetMapping("/my")
     public ResponseEntity<List<PostDTO>> showListByLogin(@AuthenticationPrincipal LoginDTO userDTO){
         return ResponseEntity.ok(postService.showListByLogin(userDTO));
     }
 
     // 개별 조회
+    @Operation(summary = "게시글 개별 조회", description = "게시글을 개별로 조회합니다.")
     @GetMapping("/{postId}")
     public ResponseEntity<PostDTO> findPost(HttpServletRequest request, HttpServletResponse response, @PathVariable("postId") Long postId){
         return ResponseEntity.ok(postService.getPostById(request,response,postId));
     }
 
     // 삭제된 리소스의 상세 정보를 함께 응답
+    @Operation(summary = "게시글 삭제", description = "게시글을 삭제합니다.")
     @DeleteMapping("/{postId}")
     public ResponseEntity<PostDTO> delete(@PathVariable("postId") Long postId){
         PostDTO delete = postService.delete(postId);
@@ -64,6 +72,7 @@ public class PostController {
     }
 
     // 수정
+    @Operation(summary = "게시글 수정", description = "게시글을 수정합니다.")
     @PatchMapping("/{postId}")
     public ResponseEntity<PostDTO> patchPost(@AuthenticationPrincipal LoginDTO userDTO,
                                              @PathVariable("postId") Long postId,
@@ -74,6 +83,7 @@ public class PostController {
     }
 
     //페이지네이션 (no-offset 방식 (무한 스크롤))
+    @Operation(summary = "무한 스크롤 페이지", description = "무한 스크롤로 게시글을 조회합니다.")
     @GetMapping("/api")
     public Page<PostDTO> getPosts(@RequestParam Long lastPostId,@RequestParam int size){
         return postService.pagePost(lastPostId,size);
