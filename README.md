@@ -103,7 +103,7 @@ http://localhost:8080/swagger-ui/index.html#/
 ![image](https://github.com/why-only-english/Programmers/assets/114092152/209714f8-886b-4052-89c2-2e49b79f9afe)
 
 ## 🛠️ Architecture Structure
-![img.png](img.png)
+![image](https://github.com/SangWoon123/swapshop-backend/assets/114092152/34d934a0-e088-4c42-ad7d-f501d5ba2ab5)
 
 <!-- 
 ## 🙋 데모 (완성X)
