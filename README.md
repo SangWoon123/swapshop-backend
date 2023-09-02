@@ -102,6 +102,8 @@ http://localhost:8080/swagger-ui/index.html#/
 ## 📑 ERD
 ![image](https://github.com/why-only-english/Programmers/assets/114092152/209714f8-886b-4052-89c2-2e49b79f9afe)
 
+## 🛠️ Architecture Structure
+![img.png](img.png)
 
 <!-- 
 ## 🙋 데모 (완성X)
