@@ -34,6 +34,7 @@ import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -208,6 +209,7 @@ public class PostService {
 //                .desiredTime(post.getDesiredTime())
 //                .status(post.getStatus())
                 .views(post.getViews())
+                .createdDate(post.getCreatedDate())
                 .images(mapImageToDto(post.getImages()))
                 .category(mapCategoryToDto(post.getCategory()))
                 .comment(mapCommentToDto(post.getComments()))
@@ -355,5 +357,22 @@ public class PostService {
         Page<PostDTO> map = page.map(post -> mapToDto(post));
 
         return map;
+    }
+
+    // 검색
+    public List<PostDTO.PostMain> search(String keyword){
+        List<Post> result = postRepository.findByTitleContainingOrCategoryMajorContainingOrCategoryProfessorContainingOrCategoryNameContaining(keyword);
+        return result.stream()
+                .map(post -> new PostDTO.PostMain(post.getTitle(), post.getContent(), post.getCreatedDate(), post.getPrice(),mapImageToDto(post.getImages())))
+                .sorted(Comparator.comparing(PostDTO.PostMain::getCreatedDate).reversed()) // 최신순으로 정렬
+                .collect(Collectors.toList());
+    }
+
+    // 가격순 정렬
+    public List<PostDTO.PostMain> sortPostsByPrice(List<PostDTO.PostMain> keyword) {
+        return keyword.stream()
+                .map(post ->  new PostDTO.PostMain(post.getTitle(), post.getContent(), post.getCreatedDate(), post.getPrice(),post.getImages()))
+                .sorted(Comparator.comparing(PostDTO.PostMain::getPrice)) // 가격순으로 정렬
+                .collect(Collectors.toList());
     }
 }

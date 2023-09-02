@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -87,6 +89,48 @@ public class PostController {
     @GetMapping("/api")
     public Page<PostDTO> getPosts(@RequestParam Long lastPostId,@RequestParam int size){
         return postService.pagePost(lastPostId,size);
+    }
+
+    /**
+     * 해당 클래스부터 는 게시물 검색 기능 구현 파트
+     *
+     * 키워드 검색
+     * 가격순 정렬
+     *
+     * @author sangwoon kim
+     * @version 1.0
+     * 23/09/01
+     */
+
+
+    /**
+     * 게시물 검색 기능구현 파트
+     *
+     * @param String keyword 검색하고싶은 게시물 키워드
+     * @return 게시물 메인화면에 보여질 정보들을 최신순 기준으로 반환한다
+     */
+    // 검색기능
+    @GetMapping("/search/{keyword}")
+    public WrappedResponse<List<PostDTO.PostMain>> searchPosts(@PathVariable("keyword") String keyword) {
+        // 최신순으로 정렬하면서 페이징 처리
+        //PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC,"createdDate"));
+        return new WrappedResponse(true,postService.search(keyword),"키워드 최신순 반영");
+    }
+
+    /**
+     * 게시물에 포함된 가격 정보를 기준으로 정렬하여줌
+     *
+     * 해당 기능은 1차 검색이 이루어진 이후에 정렬이 가능
+     * 1차 keyword 검색(searchPosts)으로 반환되는 정보를 Body에 담에 요청하면 가격데이터를 기준으로 재정렬하여 반환한다.
+     *
+     * @param List<PostDTO.PostMain> keywords 키워드로 검색된 게시물들
+     * @return 게시물 메인화면에 보여질 정보들을 낮은 가격 기준으로 정렬하여 반환한다
+     */
+    @PostMapping("/search/price")
+    public WrappedResponse<List<PostDTO.PostMain>> sortPostsByPrice(@RequestBody List<PostDTO.PostMain> keywords) {
+        // 최신순으로 정렬하면서 페이징 처리
+        //PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC,"createdDate"));
+        return new WrappedResponse(true,postService.sortPostsByPrice(keywords),"가격순 정렬");
     }
 
 }
