@@ -54,7 +54,7 @@ https://github.com/play3step/SwapShop-front
 
 
 ## 🎨 디자인
-https://file.notion.so/f/s/cf4954b1-a768-4bfc-91c6-5e76196739f1/SWAPSHOP_(1).pdf?id=ef065016-8595-47c5-929a-7b753323090d&table=block&spaceId=562dc26d-30d6-4664-924b-fe26e27d85d5&expirationTimestamp=1693555200000&signature=N06c7kAcUtAiOEg-ZA3yFgfep8gOnZH75tPQAYektNs&downloadName=SWAPSHOP+%281%29.pdf
+[SWAPSHOP_design.pdf](..%2F..%2F..%2FDownloads%2FSWAPSHOP_design.pdf)
 <br>
 
 ## 📝 어플리케이션 기능
@@ -101,9 +101,11 @@ http://localhost:8080/swagger-ui/index.html#/
 
 ## 📑 ERD
 ![image](https://github.com/why-only-english/Programmers/assets/114092152/209714f8-886b-4052-89c2-2e49b79f9afe)
+<br>
 
 ## 🛠️ Architecture Structure
 ![image](https://github.com/SangWoon123/swapshop-backend/assets/114092152/34d934a0-e088-4c42-ad7d-f501d5ba2ab5)
+<br>
 
 <!-- 
 ## 🙋 데모 (완성X)
@@ -113,4 +115,5 @@ http://localhost:8080/swagger-ui/index.html#/
 ## 데모 영상
 
 https://github.com/play3step/SwapShop-front/assets/97451257/7a433406-432e-4bf2-a2e9-601ac01dfa5a
+
 
