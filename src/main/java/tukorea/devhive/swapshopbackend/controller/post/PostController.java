@@ -111,7 +111,7 @@ public class PostController {
      */
     // 검색기능
     @GetMapping("/search/{keyword}")
-    public WrappedResponse<List<PostDTO.PostMain>> searchPosts(@PathVariable("keyword") String keyword) {
+    public WrappedResponse<List<PostDTO>> searchPosts(@PathVariable("keyword") String keyword) {
         // 최신순으로 정렬하면서 페이징 처리
         //PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC,"createdDate"));
         return new WrappedResponse(true,postService.search(keyword),"키워드 최신순 반영");
@@ -123,14 +123,30 @@ public class PostController {
      * 해당 기능은 1차 검색이 이루어진 이후에 정렬이 가능
      * 1차 keyword 검색(searchPosts)으로 반환되는 정보를 Body에 담에 요청하면 가격데이터를 기준으로 재정렬하여 반환한다.
      *
+     * -> 이 방식은 데이터 양이 많아지면 서버에서 계산량이 많아지므로, 정렬을 쿼리문에서 해결해야 좋은 코드가 될 수 있다.
+     *
      * @param List<PostDTO.PostMain> keywords 키워드로 검색된 게시물들
      * @return 게시물 메인화면에 보여질 정보들을 낮은 가격 기준으로 정렬하여 반환한다
      */
     @PostMapping("/search/price")
-    public WrappedResponse<List<PostDTO.PostMain>> sortPostsByPrice(@RequestBody List<PostDTO.PostMain> keywords) {
+    public WrappedResponse<List<PostDTO>> sortPostsByPrice(@RequestBody List<PostDTO> keywords) {
         // 최신순으로 정렬하면서 페이징 처리
         //PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC,"createdDate"));
         return new WrappedResponse(true,postService.sortPostsByPrice(keywords),"가격순 정렬");
+    }
+
+    @PostMapping("/search/major")
+    public WrappedResponse<List<PostDTO>> sortPostsByMajor(@RequestBody List<PostDTO> keywords) {
+        // 최신순으로 정렬하면서 페이징 처리
+        //PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC,"createdDate"));
+        return new WrappedResponse(true,postService.searchAndSortByMajor(keywords),"전공별 정렬");
+    }
+
+    @PostMapping("/search/title")
+    public WrappedResponse<List<PostDTO>> sortPostsByTitle(@RequestBody List<PostDTO> keywords) {
+        // 최신순으로 정렬하면서 페이징 처리
+        //PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC,"createdDate"));
+        return new WrappedResponse(true,postService.searchAndSortByTitle(keywords),"가나다렬 정렬");
     }
 
 }

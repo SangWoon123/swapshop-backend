@@ -3,6 +3,7 @@ package tukorea.devhive.swapshopbackend.service.post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -360,19 +361,32 @@ public class PostService {
     }
 
     // 검색
-    public List<PostDTO.PostMain> search(String keyword){
+    public List<PostDTO> search(String keyword){
         List<Post> result = postRepository.findByTitleContainingOrCategoryMajorContainingOrCategoryProfessorContainingOrCategoryNameContaining(keyword);
-        return result.stream()
-                .map(post -> new PostDTO.PostMain(post.getTitle(), post.getContent(), post.getCreatedDate(), post.getPrice(),mapImageToDto(post.getImages())))
-                .sorted(Comparator.comparing(PostDTO.PostMain::getCreatedDate).reversed()) // 최신순으로 정렬
+        return result.stream().map(post -> mapToDto(post))
+                .sorted(Comparator.comparing(PostDTO::getCreatedDate).reversed()) // 최신순으로 정렬
                 .collect(Collectors.toList());
     }
 
     // 가격순 정렬
-    public List<PostDTO.PostMain> sortPostsByPrice(List<PostDTO.PostMain> keyword) {
-        return keyword.stream()
-                .map(post ->  new PostDTO.PostMain(post.getTitle(), post.getContent(), post.getCreatedDate(), post.getPrice(),post.getImages()))
-                .sorted(Comparator.comparing(PostDTO.PostMain::getPrice)) // 가격순으로 정렬
+    public List<PostDTO> searchAndSortByMajor(List<PostDTO> keyword) {
+               return keyword.stream()
+                .sorted(Comparator.comparing(PostDTO::getPrice)) // 가격순으로 정렬
                 .collect(Collectors.toList());
     }
+
+    // 전공별 정렬
+    public List<PostDTO> sortPostsByPrice(List<PostDTO> keyword) {
+        return keyword.stream()
+                .sorted(Comparator.comparing(PostDTO::getPrice)) // 가격순으로 정렬
+                .collect(Collectors.toList());
+    }
+
+    // 가나다순 정렬
+    public List<PostDTO> searchAndSortByTitle(List<PostDTO> keyword){
+        return keyword.stream()
+                .sorted(Comparator.comparing(PostDTO::getTitle)) // 제목별로 가나다 순 정렬
+                .collect(Collectors.toList());
+    }
+
 }

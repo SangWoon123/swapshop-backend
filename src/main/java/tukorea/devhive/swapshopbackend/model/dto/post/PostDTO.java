@@ -49,6 +49,13 @@ public class PostDTO {
     @Data
     @Builder
     public static class PostMain{
+
+        private Long id;
+
+        private Long userId;
+        private String nickname;
+        private String major;
+
         private String title;
         private String content;
         private LocalDateTime createdDate;
@@ -56,13 +63,25 @@ public class PostDTO {
         private List<ImageDTO> images;
         //private int favorite;
 
+        // 댓글
+        private List<CommentDTO> comment;
 
-        public PostMain(String title, String content, LocalDateTime createdDate, int price, List<ImageDTO> images) {
+        //좋아요
+        private List<FavoriteDTO> favorite;
+
+
+        public PostMain(Long id, Long userId, String nickname, String major, String title, String content, LocalDateTime createdDate, int price, List<ImageDTO> images, List<CommentDTO> comment, List<FavoriteDTO> favorite) {
+            this.id = id;
+            this.userId = userId;
+            this.nickname = nickname;
+            this.major = major;
             this.title = title;
             this.content = content;
             this.createdDate = createdDate;
             this.price = price;
             this.images = images;
+            this.comment = comment;
+            this.favorite = favorite;
         }
     }
 }

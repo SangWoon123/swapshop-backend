@@ -3,6 +3,7 @@ package tukorea.devhive.swapshopbackend.repository.post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -36,5 +37,9 @@ public interface PostRepository extends JpaRepository<Post,Long> {
     // 검색기능
     @Query("SELECT p FROM Post p WHERE p.title LIKE %:keyword% OR p.category.major LIKE %:keyword% OR p.category.professor LIKE %:keyword% OR p.category.name LIKE %:keyword%")
     List<Post> findByTitleContainingOrCategoryMajorContainingOrCategoryProfessorContainingOrCategoryNameContaining(@Param("keyword") String keyword);
+
+    //정렬
+    @Query("SELECT p FROM Post p WHERE p.title LIKE %:keyword% OR p.category.major LIKE %:keyword% OR p.category.professor LIKE %:keyword% OR p.category.name LIKE %:keyword%")
+    List<Post> findByTitleContainingOrCategoryMajorContainingOrCategoryProfessorContainingOrCategoryNameContaining(@Param("keyword") String keyword, Sort sort);
 
 }
