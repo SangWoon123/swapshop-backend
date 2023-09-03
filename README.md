@@ -84,6 +84,7 @@ https://github.com/play3step/SwapShop-front
 - 23/07/27: 게시글 찜하기 완료 --> ※프론트 연결 O
 - 23/08/03: 게시글 대댓글 구현 완료 --> ※프론트 연결 O
 - 23/08/17: 쪽지 기능 구현 완료 -> ※프론트 연결 O
+- 23/09/02: 정렬(가격정렬, 전공별, 가나다순) 기능 구현 완료 -> ※프론트 연결 O
 <br>
 
 ## 📃 API
@@ -100,7 +101,11 @@ http://localhost:8080/swagger-ui/index.html#/
 <br>
 
 ## 📑 ERD
+초기 설계
 ![image](https://github.com/why-only-english/Programmers/assets/114092152/209714f8-886b-4052-89c2-2e49b79f9afe)
+
+최종 
+![image](https://github.com/SangWoon123/swapshop-backend/assets/100204926/909aff2e-37aa-4b2f-9066-e61924ca3387)
 <br>
 
 ## 🛠️ Architecture Structure
