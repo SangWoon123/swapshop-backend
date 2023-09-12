@@ -152,6 +152,7 @@ public class PostService {
 
     }
 
+    @Transactional // 트랜잭션 추가함으로서 영속성 컨텍스트속 더티체킹이 가능
     public PostDTO update(LoginDTO userDTO, Long postId, PostDTO postDTO, List<MultipartFile> images) throws IOException {
         // 유저가 작성한 게시물인지 확인하고 맞다면 삭제
         Post post = postRepository.findById(postId)
@@ -189,11 +190,8 @@ public class PostService {
         //변경감지를 통한 업데이트 적용
         post.update(postDTO.getTitle(), postDTO.getContent(), postDTO.getPrice(), postDTO.getViews(), updatedImages);
 
-        // 게시물 업데이트
-        Post updatedPost = postRepository.save(post);
-
         // 수정된 게시물 정보를 PostDTO로 변환하여 반환
-        return mapToDto(updatedPost);
+        return mapToDto(post);
     }
 
     public PostDTO mapToDto(Post post) {
